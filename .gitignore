@@ -3,9 +3,6 @@ gbctr.pdf
 acronyms.md
 
 # bazel 
-bazel-bin
-bazel-gameboy-emulator-dmg-cpu
-bazel-out
-bazel-testlogs
+bazel-*
 MODULE.bazel.lock
 
