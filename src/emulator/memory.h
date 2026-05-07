@@ -5,7 +5,7 @@
 
 class Memory {
 public:
-    static constexpr uint16_t kMemorySize = 0x1000;
+    static constexpr size_t kMemorySize = 64 << 10; // 64 KB
 
     Memory();
     void Reset();
