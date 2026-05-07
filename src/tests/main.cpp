@@ -1,6 +1,6 @@
-#include <cassert>
+#include <gtest/gtest.h>
 
-int main() {
-    assert(1 + 1 == 2);
-    return 0;
+TEST(main, Test1) {
+    EXPECT_STRNE("hello", "world");
+    EXPECT_EQ(7 * 6, 42);
 }
