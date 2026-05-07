@@ -6,3 +6,10 @@ cc_library(
     hdrs = ["memory.h"],
     visibility = ["//visibility:public"],
 )
+
+cc_library(
+    name = "registers",
+    #srcs = ["registers.cpp"],
+    hdrs = ["registers.h"],
+    visibility = ["//visibility:public"],
+)

@@ -18,3 +18,13 @@ cc_test(
         "//src/emulator:memory",
     ],
 )
+
+cc_test(
+    name = "registers",
+    srcs = ["registers.cpp"],
+    deps = [
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+        "//src/emulator:registers",
+    ],
+)
