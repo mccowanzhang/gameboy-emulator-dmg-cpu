@@ -8,3 +8,13 @@ cc_test(
         "@googletest//:gtest_main",
     ],
 )
+
+cc_test(
+    name = "memory", 
+    srcs = ["memory.cpp"],
+    deps = [
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+        "//src/cpu:memory",
+    ],
+)
