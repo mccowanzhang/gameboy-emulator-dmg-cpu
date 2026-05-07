@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(memory, test1) {
+TEST(Memory, Memory) {
     auto memory = Memory();
     EXPECT_EQ(memory.Read8(0), 0x00);
     EXPECT_EQ(memory.Read8(1), 0x00);
