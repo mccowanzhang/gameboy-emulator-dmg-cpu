@@ -1,20 +1,20 @@
 load("@rules_cc//cc:defs.bzl", "cc_test")
 
+TEST_DEPS = [
+    "@googletest//:gtest",
+    "@googletest//:gtest_main",
+]
+
 cc_test(
     name = "main",
     srcs = ["main.cpp"],
-    deps = [
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
-    ],
+    deps = TEST_DEPS + [],
 )
 
 cc_test(
     name = "memory", 
     srcs = ["memory.cpp"],
-    deps = [
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+    deps = TEST_DEPS + [
         "//src/emulator:memory",
     ],
 )
@@ -22,9 +22,7 @@ cc_test(
 cc_test(
     name = "registers",
     srcs = ["registers.cpp"],
-    deps = [
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+    deps = TEST_DEPS + [
         "//src/emulator:registers",
     ],
 )
@@ -32,9 +30,7 @@ cc_test(
 cc_test(
     name = "CPU",
     srcs = ["CPU.cpp"],
-    deps = [
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+    deps = TEST_DEPS + [
         "//src/emulator:CPU",
     ]
 )
@@ -42,9 +38,7 @@ cc_test(
 cc_test(
     name = "op",
     srcs = ["op.cpp"],
-    deps = [
-        "@googletest//:gtest",
-        "@googletest//:gtest_main",
+    deps = TEST_DEPS + [
         "//src/emulator:op",
     ]
 )
