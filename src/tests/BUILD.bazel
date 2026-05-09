@@ -28,3 +28,13 @@ cc_test(
         "//src/emulator:registers",
     ],
 )
+
+cc_test(
+    name = "CPU",
+    srcs = ["CPU.cpp"],
+    deps = [
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+        "//src/emulator:CPU",
+    ]
+)

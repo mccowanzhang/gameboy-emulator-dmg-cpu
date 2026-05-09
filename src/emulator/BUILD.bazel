@@ -13,3 +13,14 @@ cc_library(
     hdrs = ["registers.h"],
     visibility = ["//visibility:public"],
 )
+
+cc_library(
+    name = "CPU", 
+    srcs = ["CPU.cpp"],
+    hdrs = ["CPU.h"],
+    deps = [
+        ":memory",
+        ":registers",
+    ],
+    visibility = ["//visibility:public"],
+)
