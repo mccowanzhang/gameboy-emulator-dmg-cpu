@@ -24,3 +24,14 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
 )
+
+cc_library(
+    name = "op",
+    srcs = ["op.cpp"],
+    hdrs = ["op.h"],
+    deps = [
+        ":memory",
+        ":registers",
+    ],
+    visibility = ["//visibility:public"],
+)

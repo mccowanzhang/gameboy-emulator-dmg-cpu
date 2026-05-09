@@ -38,3 +38,13 @@ cc_test(
         "//src/emulator:CPU",
     ]
 )
+
+cc_test(
+    name = "op",
+    srcs = ["op.cpp"],
+    deps = [
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+        "//src/emulator:op",
+    ]
+)
