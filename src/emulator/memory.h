@@ -17,5 +17,7 @@ public:
     void Write16(uint16_t addr, uint16_t val);
 
 private:
+    // from index 0x0000 to index 0x00FF) hard coded bootstrap code,
+    // 0x100 to 0x3FFF are cartridge contents
     std::array<uint8_t, kMemorySize> memory_;
 };

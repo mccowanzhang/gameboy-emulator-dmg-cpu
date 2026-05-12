@@ -6,6 +6,14 @@ TEST_DEPS = [
 ]
 
 cc_test(
+    name = "util",
+    srcs = ["util.cpp"],
+    deps = TEST_DEPS + [
+        "//src/emulator:util",
+    ],
+)
+
+cc_test(
     name = "main",
     srcs = ["main.cpp"],
     deps = TEST_DEPS + [],

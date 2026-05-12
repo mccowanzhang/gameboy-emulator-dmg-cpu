@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <iostream>
 
 class Memory;
@@ -17,6 +18,18 @@ public:
 };
 
 class NOP : public Op {
+public:
+    void Execute(Memory& memory, Registers& registers) override;
+    void Print(std::ostream& os) const override;
+};
+
+enum ArithTarget : uint8_t {
+    A, B, C, D, E, H, L,
+};
+
+class ADD : public Op {
+private:
+    ArithTarget target;
 public:
     void Execute(Memory& memory, Registers& registers) override;
     void Print(std::ostream& os) const override;

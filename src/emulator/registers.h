@@ -3,10 +3,10 @@
 #include <cstdint> 
 
 enum Flag : uint8_t {
-    Z_FLAG = 1 << 7,
-    N_FLAG = 1 << 6,
-    H_FLAG = 1 << 5,
-    C_FLAG = 1 << 4,
+    Z_FLAG = 1 << 7, // zero
+    N_FLAG = 1 << 6, // subtract
+    H_FLAG = 1 << 5, // half carry
+    C_FLAG = 1 << 4, // carry
 };
 
 class Registers {
@@ -38,12 +38,12 @@ public:
     uint16_t HL() { return (H << 8) | L; }
 
     void SetAF(uint8_t A_val, uint8_t F_val) { A = A_val; SetF(F_val); }
-    void SetAF(uint16_t val) { SetAF((val >> 8) & 0xFF, val & 0xFF);}
+    void SetAF(uint16_t val) { SetAF((val & 0xFF00) >> 8, val & 0xFF);}
     void SetBC(uint8_t B_val, uint8_t C_val) { B = B_val; C = C_val; }
-    void SetBC(uint16_t val) { SetBC((val >> 8) & 0xFF, val & 0xFF);}
+    void SetBC(uint16_t val) { SetBC((val & 0xFF00) >> 8, val & 0xFF);}
     void SetDE(uint8_t D_val, uint8_t E_val) { D = D_val; E = E_val; }
-    void SetDE(uint16_t val) { SetDE((val >> 8) & 0xFF, val & 0xFF);}
+    void SetDE(uint16_t val) { SetDE((val & 0xFF00) >> 8, val & 0xFF);}
     void SetHL(uint8_t H_val, uint8_t L_val) { H = H_val; L = L_val; }
-    void SetHL(uint16_t val) { SetHL((val >> 8) & 0xFF, val & 0xFF);}
+    void SetHL(uint16_t val) { SetHL((val & 0xFF00) >> 8, val & 0xFF);}
 };
 

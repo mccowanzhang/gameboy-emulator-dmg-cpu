@@ -1,6 +1,13 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
 
 cc_library(
+    name = "util",
+    #srcs = ["util.cpp"],
+    hdrs = ["util.h"],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
     name = "memory",
     srcs = ["memory.cpp"],
     hdrs = ["memory.h"],
@@ -21,6 +28,7 @@ cc_library(
     deps = [
         ":memory",
         ":registers",
+        ":util",
     ],
     visibility = ["//visibility:public"],
 )
@@ -32,6 +40,8 @@ cc_library(
     deps = [
         ":memory",
         ":registers",
+        ":util",
+        "@abseil-cpp//absl/log"
     ],
     visibility = ["//visibility:public"],
 )
