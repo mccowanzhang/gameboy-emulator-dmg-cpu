@@ -1,0 +1,47 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+# Aggregate library 
+cc_library(
+    name = "op",
+    srcs = ["op.cpp"],
+    hdrs = ["op.h"],
+    deps = [
+        ":op_base",
+        ":nop",
+        ":add",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+# Base abstract class
+cc_library(
+    name = "op_base",
+    hdrs = ["op_base.h"],
+)
+
+# Individual concrete operations
+
+COMMON_OP_DEPS = [
+    ":op_base",
+    "//src/emulator:memory",
+    "//src/emulator:registers",
+    "//src/emulator:util",
+    "@abseil-cpp//absl/log",
+]
+
+cc_library(
+    name = "nop",
+    srcs = ["nop.cpp"],
+    hdrs = ["nop.h"],
+    deps = COMMON_OP_DEPS,
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "add",
+    srcs = ["add.cpp"],
+    hdrs = ["add.h"],
+    deps = COMMON_OP_DEPS,
+    visibility = ["//visibility:public"],
+)
+

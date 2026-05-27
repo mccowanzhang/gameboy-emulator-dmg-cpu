@@ -1,18 +1,10 @@
-#include "src/emulator/op.h"
+#include "src/emulator/op/add.h"
 
 #include "src/emulator/memory.h"
 #include "src/emulator/registers.h"
 #include "src/emulator/util.h"
 
 #include "absl/log/log.h"
-
-void NOP::Execute(Memory& memory, Registers& registers) {
-    return;
-}
-
-void NOP::Print(std::ostream& os) const {
-    os << "NOP" << "\n";
-}
 
 void ADD::Execute(Memory& memory, Registers& registers) {
     uint8_t val = 0;
@@ -51,6 +43,6 @@ void ADD::Execute(Memory& memory, Registers& registers) {
     registers.A = new_val;
 }
 
-void ADD::Print(std::ostream& os) const {
-    os << "ADD" << "\n";
+std::string ADD::Print() const {
+    return "ADD";
 }

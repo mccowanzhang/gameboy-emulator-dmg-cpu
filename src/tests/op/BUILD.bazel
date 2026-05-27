@@ -1,0 +1,30 @@
+load("@rules_cc//cc:defs.bzl", "cc_test")
+
+TEST_DEPS = [
+    "@googletest//:gtest",
+    "@googletest//:gtest_main",
+]
+
+cc_test(
+    name = "op",
+    srcs = ["op.cpp"],
+    deps = TEST_DEPS + [
+        "//src/emulator/op:op",
+    ]
+)
+
+cc_test(
+    name = "nop",
+    srcs = ["nop.cpp"],
+    deps = TEST_DEPS + [
+        "//src/emulator/op:nop",
+    ]
+)
+
+cc_test(
+    name = "add",
+    srcs = ["add.cpp"],
+    deps = TEST_DEPS + [
+        "//src/emulator/op:add",
+    ],
+)
