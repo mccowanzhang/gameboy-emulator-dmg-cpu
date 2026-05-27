@@ -29,6 +29,7 @@ cc_library(
         ":memory",
         ":registers",
         ":util",
+        "@abseil-cpp//absl/log"
     ],
     visibility = ["//visibility:public"],
 )

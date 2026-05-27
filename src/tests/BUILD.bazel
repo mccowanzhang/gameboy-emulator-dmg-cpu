@@ -40,6 +40,7 @@ cc_test(
     srcs = ["CPU.cpp"],
     deps = TEST_DEPS + [
         "//src/emulator:CPU",
+        "//src/emulator:memory",
     ]
 )
 
