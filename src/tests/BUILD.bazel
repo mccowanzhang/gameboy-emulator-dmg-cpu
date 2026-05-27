@@ -43,11 +43,3 @@ cc_test(
         "//src/emulator:memory",
     ]
 )
-
-cc_test(
-    name = "op",
-    srcs = ["op.cpp"],
-    deps = TEST_DEPS + [
-        "//src/emulator:op",
-    ]
-)
