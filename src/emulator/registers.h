@@ -27,15 +27,15 @@ public:
     uint8_t H = 0;
     uint8_t L = 0;
 
-    uint8_t GetF() { return F; }
+    uint8_t GetF() const { return F; }
     void SetF(uint8_t val) { F = (val & 0xF0); } // bits 0:3 always 0
     bool GetFlag(Flag flag) { return (F & flag) != 0; }
     void SetFlag(Flag flag, bool flag_val) { SetF(flag_val ? (F | flag) : (F & ~flag)); }
 
-    uint16_t AF() { return (A << 8) | F; }
-    uint16_t BC() { return (B << 8) | C; }
-    uint16_t DE() { return (D << 8) | E; }
-    uint16_t HL() { return (H << 8) | L; }
+    uint16_t AF() const { return (A << 8) | F; }
+    uint16_t BC() const { return (B << 8) | C; }
+    uint16_t DE() const { return (D << 8) | E; }
+    uint16_t HL() const { return (H << 8) | L; }
 
     void SetAF(uint8_t A_val, uint8_t F_val) { A = A_val; SetF(F_val); }
     void SetAF(uint16_t val) { SetAF((val & 0xFF00) >> 8, val & 0xFF);}
@@ -45,5 +45,23 @@ public:
     void SetDE(uint16_t val) { SetDE((val & 0xFF00) >> 8, val & 0xFF);}
     void SetHL(uint8_t H_val, uint8_t L_val) { H = H_val; L = L_val; }
     void SetHL(uint16_t val) { SetHL((val & 0xFF00) >> 8, val & 0xFF);}
+
+    bool operator==(const Registers& other) const {
+        return PC == other.PC &&
+               SP == other.SP &&
+               A == other.A &&
+               IR == other.IR &&
+               IE == other.IE && 
+               B == other.B && 
+               C == other.C &&
+               D == other.D && 
+               E == other.E &&
+               F == other.GetF() &&
+               H == other.H &&
+               L == other.L;
+    }
+    bool operator!=(const Registers& other) const {
+        return !(*this == other);
+    }
 };
 

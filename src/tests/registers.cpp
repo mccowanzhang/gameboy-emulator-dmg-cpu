@@ -69,3 +69,39 @@ TEST(Registers, CombinedHalfRegisters) {
     registers.SetHL(0x5678);
     EXPECT_EQ(registers.HL(), 0x5678);
 }
+
+TEST(Registers, Comparison) {
+    auto registers1 = Registers();
+    auto registers2 = Registers();
+    EXPECT_EQ(registers1, registers2);
+    registers2.A += 1;
+    EXPECT_NE(registers1, registers2);
+
+    registers2 = Registers();
+    registers2.B += 1;
+    EXPECT_NE(registers1, registers2);
+
+    registers2 = Registers();
+    registers2.C += 1;
+    EXPECT_NE(registers1, registers2);
+
+    registers2 = Registers();
+    registers2.D += 1;
+    EXPECT_NE(registers1, registers2);
+    
+    registers2 = Registers();
+    registers2.E += 1;
+    EXPECT_NE(registers1, registers2);
+
+    registers2 = Registers();
+    registers2.SetFlag(Flag::Z_FLAG, true);
+    EXPECT_NE(registers1, registers2);
+
+    registers2 = Registers();
+    registers2.H += 1;
+    EXPECT_NE(registers1, registers2);
+
+    registers2 = Registers();
+    registers2.L += 1;
+    EXPECT_NE(registers1, registers2);
+}
