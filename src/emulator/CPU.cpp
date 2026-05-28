@@ -1,6 +1,7 @@
 #include "src/emulator/CPU.h"
 
 #include "src/emulator/memory.h"
+#include "src/emulator/op/op.h"
 
 CPU::CPU(Memory& memory) : memory_(memory) {
     Reset();
@@ -9,6 +10,16 @@ CPU::CPU(Memory& memory) : memory_(memory) {
 void CPU::Reset() {
     memory_.Reset();
     registers_ = {};
+}
+
+void CPU::Step() {
+    uint8_t op_code = Fetch8();
+    auto op = ParseOp(op_code);
+    op->Execute(memory_, registers_);
+}
+
+Registers CPU::GetRegisters() const {
+    return registers_;
 }
 
 uint8_t CPU::Fetch8() {

@@ -11,6 +11,7 @@ public:
     explicit CPU(Memory& memory);
     void Reset();
     void Step();
+    Registers GetRegisters() const;
 
 private:
     uint8_t Fetch8();

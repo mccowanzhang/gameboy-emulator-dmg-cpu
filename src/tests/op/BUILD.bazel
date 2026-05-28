@@ -1,6 +1,8 @@
 load("@rules_cc//cc:defs.bzl", "cc_test")
 
 TEST_DEPS = [
+    "//src/emulator:CPU",
+    "//src/emulator:memory",
     "@googletest//:gtest",
     "@googletest//:gtest_main",
 ]

@@ -1,5 +1,8 @@
 #include "src/emulator/op/nop.h"
 
+#include "src/emulator/CPU.h"
+#include "src/emulator/memory.h"
+
 #include <gtest/gtest.h>
 #include <iostream>
 #include <memory>
@@ -24,4 +27,17 @@ TEST(Op, Print) {
     ss.clear();
     op->Print(ss);
     EXPECT_EQ(ss.str(), expected);
+}
+
+TEST(Op, NOP) {
+    auto memory = Memory();
+    memory.Write8(0x0000, NOP::kOpCode);
+    auto cpu = CPU(memory);
+    auto prestep_registers = cpu.GetRegisters();
+    cpu.Step();
+    auto poststep_registers = cpu.GetRegisters();
+    EXPECT_NE(prestep_registers, poststep_registers);
+    EXPECT_EQ(poststep_registers.PC, 0x0001);
+    poststep_registers.PC = prestep_registers.PC;
+    EXPECT_EQ(prestep_registers, poststep_registers);
 }
