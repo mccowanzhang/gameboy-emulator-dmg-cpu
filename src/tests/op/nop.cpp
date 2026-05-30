@@ -31,7 +31,7 @@ TEST(Op, Print) {
 
 TEST(Op, NOP) {
     auto memory = Memory();
-    memory.Write8(0x0000, NOP::kOpCode);
+    memory.Write8(0x0000, 0x00);
     auto cpu = CPU(memory);
     auto prestep_registers = cpu.GetRegisters();
     cpu.Step();

@@ -14,7 +14,7 @@ void CPU::Reset() {
 
 void CPU::Step() {
     uint8_t op_code = Fetch8();
-    auto op = ParseOp(op_code);
+    auto op = DecodeOp(op_code);
     op->Execute(memory_, registers_);
 }
 
