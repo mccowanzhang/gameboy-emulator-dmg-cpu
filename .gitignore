@@ -6,3 +6,5 @@ acronyms.md
 bazel-*
 MODULE.bazel.lock
 
+# workspace
+.vscode
