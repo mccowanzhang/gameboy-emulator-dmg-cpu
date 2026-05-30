@@ -1,19 +1,38 @@
 #pragma once
 
+#include <array>
 #include <limits> 
+#include <tuple>
 #include <type_traits>
 
 template <typename T>
-bool OverflowingAdd(T a, T b, T& res) {
-    static_assert(std::is_integral_v<T>, "Must be integral type");
+std::pair<T, std::array<bool, sizeof(T) * 8>> OverflowingAdd(T a, T b) {
+    static_assert(std::is_unsigned_v<T>,
+                  "Carry tracking only makes sense for unsigned types");
 
-    res = a + b;
+    constexpr size_t kBits = sizeof(T) * 8;
+    std::array<bool, kBits> carry_per_bit{};
+    T result = 0;
+    bool carry = false;
 
-    if constexpr(std::is_signed_v<T>) {
-        return
-            (b > 0 && a > std::numeric_limits<T>::max() - b) ||
-            (b < 0 && a < std::numeric_limits<T>::min() - b);
-    } else {
-        return res < a;
+    for (size_t bit = 0; bit < kBits; ++bit) {
+        bool a_bit = (a >> bit) & 1;
+        bool b_bit = (b >> bit) & 1;
+
+        bool sum_bit = a_bit ^ b_bit ^ carry;
+
+        bool carry_out =
+            (a_bit && b_bit) ||
+            (a_bit && carry) ||
+            (b_bit && carry);
+
+        if (sum_bit) {
+            result |= (T{1} << bit);
+        }
+
+        carry_per_bit[bit] = carry_out;
+        carry = carry_out;
     }
+
+    return {result, carry_per_bit};
 }

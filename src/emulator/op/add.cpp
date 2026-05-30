@@ -39,13 +39,12 @@ void ADD::Execute(Memory& memory, Registers& registers) {
             LOG(FATAL) << "Unrecognized ADD target\n";
     }
 
-    uint8_t new_val;
-    bool overflowed = OverflowingAdd<uint8_t>(registers.A, val, new_val);
-    registers.SetFlag(Z_FLAG, new_val == 0);
+    auto [res, carry_per_bit] = OverflowingAdd<uint8_t>(registers.A, val);
+    registers.A = res;
+    registers.SetFlag(Z_FLAG, res == 0);
     registers.SetFlag(N_FLAG, false);
-    registers.SetFlag(H_FLAG, (registers.A & 0x0F) + (new_val & 0x0F) > 0x0F);
-    registers.SetFlag(C_FLAG, overflowed);
-    registers.A = new_val;
+    registers.SetFlag(H_FLAG, carry_per_bit[3]);
+    registers.SetFlag(C_FLAG, carry_per_bit[7]);
 }
 
 std::string ADD::Print() const {
