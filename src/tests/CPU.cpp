@@ -11,7 +11,7 @@ TEST(CPU, reset) {
 TEST(CPU, registers) {
     Memory memory;
     CPU cpu(memory);
-    Registers registers = cpu.GetRegisters();
+    Registers registers = cpu.registers;
 
     EXPECT_EQ(registers.GetFlag(Flag::Z_FLAG), false);
     EXPECT_EQ(registers.GetFlag(Flag::N_FLAG), false);
@@ -31,6 +31,6 @@ TEST(CPU, registers) {
 
     // should not change cpu registers
     registers.A = 0x01;
-    Registers registers2 = cpu.GetRegisters();
+    Registers registers2 = cpu.registers;
     EXPECT_EQ(registers2.A, 0x00);
 }

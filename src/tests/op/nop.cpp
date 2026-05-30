@@ -33,9 +33,9 @@ TEST(Op, NOP) {
     auto memory = Memory();
     memory.Write8(0x0000, 0x00);
     auto cpu = CPU(memory);
-    auto prestep_registers = cpu.GetRegisters();
+    auto prestep_registers = cpu.registers;
     cpu.Step();
-    auto poststep_registers = cpu.GetRegisters();
+    auto poststep_registers = cpu.registers;
     EXPECT_NE(prestep_registers, poststep_registers);
     EXPECT_EQ(poststep_registers.PC, 0x0001);
     poststep_registers.PC = prestep_registers.PC;

@@ -11,7 +11,7 @@ std::unique_ptr<Op> ADD::Decode(uint8_t op_code) {
     return nullptr;
 }
 
-void ADD::Execute(Memory& memory, Registers& registers) {
+void ADD::Execute(Registers& registers, Memory& memory) {
     uint8_t val = 0;
     switch (target) {
         case A:

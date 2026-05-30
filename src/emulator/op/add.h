@@ -11,7 +11,7 @@ enum ArithTarget : uint8_t {
 class ADD : public Op {
 public:
     static std::unique_ptr<Op> Decode(uint8_t opcode);
-    void Execute(Memory& memory, Registers& registers) override;
+    void Execute(Registers& registers, Memory& memory) override;
     std::string Print() const override;
 private:
     ArithTarget target;
