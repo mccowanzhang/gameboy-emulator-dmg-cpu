@@ -1,12 +1,10 @@
 #pragma once 
 
-#include "src/emulator/op/op_base.h"
+#include "src/emulator/op/add.h"
+#include "src/emulator/op/nop.h"
 
 #include <memory>
 #include <vector>
-
-std::unique_ptr<Op> DecodeNOP(uint8_t op_code);
-std::unique_ptr<Op> DecodeADD(uint8_t op_code);
 
 struct DecodeRule {
     uint8_t value;
@@ -16,9 +14,14 @@ struct DecodeRule {
 
 static const std::vector<DecodeRule> kDecodeRules = {
     {
-        .value = 0x00,
-        .mask = 0xFF,
-        .decoder = DecodeNOP,
+        .value = 0b00000000,
+        .mask =  0b11111111,
+        .decoder = &NOP::Decode,
+    },
+    {
+        .value = 0b10000000,
+        .mask =  0b11111000,
+        .decoder = &ADD::Decode,
     },
 };
 

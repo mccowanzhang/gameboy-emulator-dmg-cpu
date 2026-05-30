@@ -6,6 +6,11 @@
 
 #include "absl/log/log.h"
 
+std::unique_ptr<Op> ADD::Decode(uint8_t op_code) {
+    // TODO: impl
+    return nullptr;
+}
+
 void ADD::Execute(Memory& memory, Registers& registers) {
     uint8_t val = 0;
     switch (target) {

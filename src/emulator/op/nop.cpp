@@ -6,6 +6,10 @@
 
 #include "absl/log/log.h"
 
+std::unique_ptr<Op> NOP::Decode(uint8_t op_code) {
+    return std::make_unique<NOP>();
+}
+
 void NOP::Execute(Memory& memory, Registers& registers) {
     return;
 }
