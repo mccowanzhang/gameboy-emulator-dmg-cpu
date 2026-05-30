@@ -1,10 +1,9 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
 
-# Aggregate library 
 cc_library(
-    name = "op",
-    srcs = ["op.cpp"],
-    hdrs = ["op.h"],
+    name = "decoder",
+    srcs = ["decoder.cpp"],
+    hdrs = ["decoder.h"],
     deps = [
         ":op_base",
         ":nop",

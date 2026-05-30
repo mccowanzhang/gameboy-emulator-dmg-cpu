@@ -29,7 +29,7 @@ cc_library(
         ":memory",
         ":registers",
         ":util",
-        "//src/emulator/op:op",
+        "//src/emulator/op:decoder",
     ],
     visibility = ["//visibility:public"],
 )

@@ -8,10 +8,10 @@ TEST_DEPS = [
 ]
 
 cc_test(
-    name = "op",
-    srcs = ["op.cpp"],
+    name = "decoder",
+    srcs = ["decoder.cpp"],
     deps = TEST_DEPS + [
-        "//src/emulator/op:op",
+        "//src/emulator/op:decoder",
     ]
 )
 

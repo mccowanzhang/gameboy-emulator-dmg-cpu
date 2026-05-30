@@ -1,7 +1,7 @@
 #include "src/emulator/CPU.h"
 
 #include "src/emulator/memory.h"
-#include "src/emulator/op/op.h"
+#include "src/emulator/op/decoder.h"
 
 CPU::CPU(Memory& memory) : memory_(memory) {
     Reset();
