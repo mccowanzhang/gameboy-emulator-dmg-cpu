@@ -27,3 +27,14 @@ protected:
 private:
     ArithTarget target;
 };
+
+class ADC : public Op {
+public:
+    explicit ADC(ArithTarget target);
+    static std::unique_ptr<Op> Decode(uint8_t opcode);
+    std::string Print() const override;
+protected:
+    void ExecuteImpl(Registers& registers, Memory& memory) override;
+private:
+    ArithTarget target;
+};
