@@ -24,9 +24,9 @@ void CPU::Step() {
 }
 
 uint8_t CPU::Fetch8() {
-    LOG(INFO) << "Fetch 8 bits from " << std::hex << registers.PC;
+    LOG(INFO) << "Fetch 8 bits from addr " << std::hex << registers.PC;
     uint8_t val = memory.Read8(registers.PC);
-    LOG(INFO) << "Fetched 8 bytes: " << std::bitset<8>(val);
+    LOG(INFO) << "Fetched 8 bits: " << std::bitset<8>(val);
     registers.PC += 1;
     return val;
 }
