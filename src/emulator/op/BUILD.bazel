@@ -15,7 +15,11 @@ cc_library(
 # Base abstract class
 cc_library(
     name = "op_base",
+    srcs = ["op_base.cpp"],
     hdrs = ["op_base.h"],
+    deps = [
+        "@abseil-cpp//absl/log",
+    ],
 )
 
 # Individual concrete operations

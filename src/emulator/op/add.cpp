@@ -6,12 +6,37 @@
 
 #include "absl/log/log.h"
 
+std::string Print(ArithTarget target) {
+    switch (target) {
+        case A:
+            return "A";
+        case B:
+            return "B";
+        case C:
+            return "C";
+        case D:
+            return "D";
+        case E:
+            return "E";
+        case H:
+            return "H";
+        case L:
+            return "L";
+        case HLI:
+            return "HLI";
+        default:
+            return "Unrecognized ADD target";
+    }
+}
+
+ADD::ADD(ArithTarget target) : target(target) {}
+
 std::unique_ptr<Op> ADD::Decode(uint8_t op_code) {
     // TODO: impl
     return nullptr;
 }
 
-void ADD::Execute(Registers& registers, Memory& memory) {
+void ADD::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t val = 0;
     switch (target) {
         case A:
@@ -48,5 +73,5 @@ void ADD::Execute(Registers& registers, Memory& memory) {
 }
 
 std::string ADD::Print() const {
-    return "ADD";
+    return "ADD, target: " + ::Print(target);
 }
