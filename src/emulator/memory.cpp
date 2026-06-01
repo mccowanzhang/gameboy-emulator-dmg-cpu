@@ -29,3 +29,9 @@ void Memory::Write16(uint16_t addr, uint16_t val) {
     uint8_t high = (val >> 8) & 0xFF;
     memory_[addr + 1] = high;
 }
+
+void Memory::WriteProgram(uint16_t addr, std::span<const uint8_t> program) {
+    for (size_t i = 0; i < program.size(); ++i) {
+        memory_[addr + i] = program[i];
+    }
+}

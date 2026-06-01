@@ -17,3 +17,22 @@ TEST(Util, OverflowingAdd) {
     EXPECT_EQ(overflowed1[7], false);
     EXPECT_EQ(c1, 0xFF);
 }
+
+
+#include <gtest/gtest.h>
+
+TEST(Util, GetBitRange) {
+    uint8_t v = 0b11110000;
+
+    auto r0 = GetBitRange<uint8_t>(v, 0, 3);
+    EXPECT_EQ(r0, 0b00000000);
+
+    auto r1 = GetBitRange<uint8_t>(v, 4, 7);
+    EXPECT_EQ(r1, 0b00001111);
+
+    auto r2 = GetBitRange<uint8_t>(0b10101011, 0, 3);
+    EXPECT_EQ(r2, 0b00001011);
+
+    auto r3 = GetBitRange<uint8_t>(0b10101011, 4, 7);
+    EXPECT_EQ(r3, 0b00001010);
+}

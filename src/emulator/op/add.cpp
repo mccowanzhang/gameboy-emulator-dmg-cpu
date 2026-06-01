@@ -32,8 +32,8 @@ std::string Print(ArithTarget target) {
 ADD::ADD(ArithTarget target) : target(target) {}
 
 std::unique_ptr<Op> ADD::Decode(uint8_t op_code) {
-    // TODO: impl
-    return nullptr;
+    auto target = static_cast<ArithTarget>(GetBitRange(op_code, 0, 2));
+    return std::make_unique<ADD>(target);
 }
 
 void ADD::ExecuteImpl(Registers& registers, Memory& memory) {
@@ -59,6 +59,9 @@ void ADD::ExecuteImpl(Registers& registers, Memory& memory) {
             break;
         case L:
             val = registers.L;
+            break;
+        case HLI:
+            val = memory.Read8(registers.HL());
             break;
         default:
             LOG(FATAL) << "Unrecognized ADD target\n";

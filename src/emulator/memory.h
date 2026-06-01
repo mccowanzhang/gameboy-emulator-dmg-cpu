@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstdint>
+#include <span>
 
 class Memory {
 public:
@@ -15,6 +16,8 @@ public:
 
     uint16_t Read16(uint16_t addr) const;
     void Write16(uint16_t addr, uint16_t val);
+
+    void WriteProgram(uint16_t addr, std::span<const uint8_t> program);
 
 private:
     // from index 0x0000 to index 0x00FF) hard coded bootstrap code,

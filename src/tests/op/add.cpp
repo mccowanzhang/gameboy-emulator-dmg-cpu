@@ -4,6 +4,7 @@
 #include "src/emulator/memory.h"
 
 #include <gtest/gtest.h>
+
 #include <iostream>
 #include <memory>
 
@@ -27,4 +28,14 @@ TEST(ADD, Print) {
     ss.clear();
     op->Print(ss);
     EXPECT_EQ(ss.str(), expected);
+}
+
+TEST(ADD, ADD) {
+    auto memory = Memory();
+    auto cpu = CPU(memory);
+    cpu.memory.Write8(0x0000, 0b10000000); // add B to A
+    cpu.registers.A = 3;
+    cpu.registers.B = 5;
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, 8);
 }

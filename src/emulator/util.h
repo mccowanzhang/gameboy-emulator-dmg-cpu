@@ -36,3 +36,17 @@ std::pair<T, std::array<bool, sizeof(T) * 8>> OverflowingAdd(T a, T b) {
 
     return {result, carry_per_bit};
 }
+
+template <typename T>
+T GetBitRange(T value, uint8_t low, uint8_t high) { // low, high inclusive
+    static_assert(std::is_integral_v<T>, "T must be integral");
+    constexpr uint8_t kBits = sizeof(T) * 8;
+    if (low > high) {
+        throw std::invalid_argument("low must be <= high");
+    }
+    if (high >= kBits) {
+        throw std::out_of_range("bit range exceeds type width");
+    }
+    T mask = ((T{1} << (high - low + 1)) - 1) << low;
+    return (value & mask) >> low;
+}
