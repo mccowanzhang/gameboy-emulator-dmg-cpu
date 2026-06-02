@@ -24,3 +24,26 @@ protected:
 private:
     Target dest;
 };
+
+enum LD_RR_Mode : uint8_t {
+    BCI_A = 0b000,
+    A_BCI = 0b001,
+    DEI_A = 0b010,
+    A_DEI = 0b011,
+    HLPLUSI_A = 0b100,
+    A_HLPLUSI = 0b101,
+    HLMINUSI_A = 0b110,
+    A_HLMINUSI = 0b111,
+};
+std::string Print(LD_RR_Mode mode);
+
+class LD_RR : public Op {
+public:
+    explicit LD_RR(LD_RR_Mode mode);
+    static std::unique_ptr<Op> Decode(uint8_t op_code);
+    std::string Print() const override;
+protected:
+    void ExecuteImpl(Registers& registers, Memory& memory) override;
+private:
+    LD_RR_Mode mode;
+};

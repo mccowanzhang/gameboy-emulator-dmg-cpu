@@ -45,6 +45,8 @@ public:
     void SetDE(uint16_t val) { SetDE((val & 0xFF00) >> 8, val & 0xFF);}
     void SetHL(uint8_t H_val, uint8_t L_val) { H = H_val; L = L_val; }
     void SetHL(uint16_t val) { SetHL((val & 0xFF00) >> 8, val & 0xFF);}
+    void IncHL() { SetHL(HL() + 1); }
+    void DecHL() { SetHL(HL() - 1); }
 
     bool operator==(const Registers& other) const {
         return PC == other.PC &&

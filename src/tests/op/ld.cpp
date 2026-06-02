@@ -73,3 +73,95 @@ TEST_F(LDTest, LD_HLI_N) {
     EXPECT_EQ(cpu.memory.Read8(kAddr), kVal2);
     EXPECT_EQ(cpu.registers.PC, 0x0002);
 }
+
+TEST_F(LDTest, LD_BCI_A) {
+    std::array<uint8_t, 1> program{
+        0b00000010, // LD to BCI from A
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal1;
+    cpu.registers.SetBC(kAddr);
+    cpu.Step();
+    EXPECT_EQ(cpu.memory.Read8(kAddr), kVal1);
+}
+
+TEST_F(LDTest, LD_A_BCI) {
+    std::array<uint8_t, 1> program{
+        0b00001010, // LD to A from BCI
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.SetBC(kAddr);
+    cpu.memory.Write8(kAddr, kVal1);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, kVal1);
+}
+
+TEST_F(LDTest, LD_DEI_A) {
+    std::array<uint8_t, 1> program{
+        0b00010010, // LD to DEI from A
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal1;
+    cpu.registers.SetDE(kAddr);
+    cpu.Step();
+    EXPECT_EQ(cpu.memory.Read8(kAddr), kVal1);
+}
+
+TEST_F(LDTest, LD_A_DEI) {
+    std::array<uint8_t, 1> program{
+        0b00011010, // LD to A from DEI
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.SetDE(kAddr);
+    cpu.memory.Write8(kAddr, kVal1);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, kVal1);
+}
+
+TEST_F(LDTest, LD_HLPLUSI_A) {
+    std::array<uint8_t, 1> program{
+        0b00100010, // LD to HLPLUSI from A
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal1;
+    cpu.registers.SetHL(kAddr);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.HL(), kAddr + 1);
+    EXPECT_EQ(cpu.memory.Read8(kAddr), kVal1);
+}
+
+TEST_F(LDTest, LD_A_HLPLUSI) {
+    std::array<uint8_t, 1> program{
+        0b00101010, // LD to A from HLPLUSI
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.SetHL(kAddr);
+    cpu.memory.Write8(kAddr, kVal1);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, kVal1);
+    EXPECT_EQ(cpu.registers.HL(), kAddr + 1);
+}
+
+TEST_F(LDTest, LD_HLMINUSI_A) {
+    std::array<uint8_t, 1> program{
+        0b00110010, // LD to HLMINUSI from A
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal1;
+    cpu.registers.SetHL(kAddr);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.HL(), kAddr - 1);
+    EXPECT_EQ(cpu.memory.Read8(kAddr), kVal1);
+}
+
+TEST_F(LDTest, LD_A_HLMINUSI) {
+    std::array<uint8_t, 1> program{
+        0b00111010, // LD to A from HLMINUSI
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.SetHL(kAddr);
+    cpu.memory.Write8(kAddr, kVal1);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, kVal1);
+    EXPECT_EQ(cpu.registers.HL(), kAddr - 1);
+}

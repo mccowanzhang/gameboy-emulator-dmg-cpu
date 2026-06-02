@@ -122,3 +122,72 @@ void LD_R_N::ExecuteImpl(Registers& registers, Memory& memory) {
             LOG(FATAL) << "Unrecognized dest operand\n";
     }
 }
+
+std::string Print(LD_RR_Mode mode) {
+    switch (mode) {
+        case BCI_A:
+            return "BCI_A";
+        case A_BCI:
+            return "A_BCI";
+        case DEI_A:
+            return "DEI_A";
+        case A_DEI:
+            return "A_DEI";
+        case HLPLUSI_A:
+            return "HLPLUSI_A";
+        case A_HLPLUSI:
+            return "A_HLPLUSI";
+        case HLMINUSI_A:
+            return "HLMINUSI_A";
+        case A_HLMINUSI:
+            return "A_HLMINUSI";
+        default:
+            return "Unrecognized LD RR mode";
+    }
+}
+
+LD_RR::LD_RR(LD_RR_Mode mode) : mode(mode) {}
+
+std::unique_ptr<Op> LD_RR::Decode(uint8_t op_code) {
+    auto mode = static_cast<LD_RR_Mode>(GetBitRange(op_code, 3, 5));
+    return std::make_unique<LD_RR>(mode);
+}
+
+void LD_RR::ExecuteImpl(Registers& registers, Memory& memory) {
+    switch (mode) {
+        case BCI_A:
+            memory.Write8(registers.BC(), registers.A);
+            break;
+        case A_BCI:
+            registers.A = memory.Read8(registers.BC());
+            break;
+        case DEI_A:
+            memory.Write8(registers.DE(), registers.A);
+            break;
+        case A_DEI:
+            registers.A = memory.Read8(registers.DE());
+            break;
+        case HLPLUSI_A:
+            memory.Write8(registers.HL(), registers.A);
+            registers.IncHL();
+            break;
+        case A_HLPLUSI:
+            registers.A = memory.Read8(registers.HL());
+            registers.IncHL();
+            break;
+        case HLMINUSI_A:
+            memory.Write8(registers.HL(), registers.A);
+            registers.DecHL();
+            break;
+        case A_HLMINUSI:
+            registers.A = memory.Read8(registers.HL());
+            registers.DecHL();
+            break;
+        default:
+            LOG(FATAL) << "Unrecognized LD RR mode";
+    }
+}
+
+std::string LD_RR::Print() const {
+    return "LD_RR, mode: " + ::Print(mode);
+}
