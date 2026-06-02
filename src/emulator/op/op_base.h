@@ -19,3 +19,15 @@ public:
 protected:
     virtual void ExecuteImpl(Registers& registers, Memory& memory) = 0;
 };
+
+enum Target : uint8_t {
+    A = 0b111,
+    B = 0b000,
+    C = 0b001,
+    D = 0b010,
+    E = 0b011,
+    H = 0b100,
+    L = 0b101,
+    HLI = 0b110,
+};
+std::string Print(Target target);

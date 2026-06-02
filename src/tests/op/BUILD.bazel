@@ -16,6 +16,14 @@ cc_test(
 )
 
 cc_test(
+    name = "ld",
+    srcs = ["ld.cpp"],
+    deps = TEST_DEPS + [
+        "//src/emulator/op:ld",
+    ]
+)
+
+cc_test(
     name = "nop",
     srcs = ["nop.cpp"],
     deps = TEST_DEPS + [

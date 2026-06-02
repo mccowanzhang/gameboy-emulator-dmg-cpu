@@ -6,6 +6,7 @@ cc_library(
     hdrs = ["decoder.h"],
     deps = [
         ":op_base",
+        ":ld",
         ":nop",
         ":add",
     ],
@@ -31,6 +32,14 @@ COMMON_OP_DEPS = [
     "//src/emulator:util",
     "@abseil-cpp//absl/log",
 ]
+
+cc_library(
+    name = "ld",
+    srcs = ["ld.cpp"],
+    hdrs = ["ld.h"],
+    deps = COMMON_OP_DEPS,
+    visibility = ["//visibility:public"],
+)
 
 cc_library(
     name = "nop",

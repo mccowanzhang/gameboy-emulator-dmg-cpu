@@ -6,33 +6,10 @@
 
 #include "absl/log/log.h"
 
-std::string Print(ArithTarget target) {
-    switch (target) {
-        case A:
-            return "A";
-        case B:
-            return "B";
-        case C:
-            return "C";
-        case D:
-            return "D";
-        case E:
-            return "E";
-        case H:
-            return "H";
-        case L:
-            return "L";
-        case HLI:
-            return "HLI";
-        default:
-            return "Unrecognized ADD target";
-    }
-}
-
-ADD::ADD(ArithTarget target) : target(target) {}
+ADD::ADD(Target target) : target(target) {}
 
 std::unique_ptr<Op> ADD::Decode(uint8_t op_code) {
-    auto target = static_cast<ArithTarget>(GetBitRange(op_code, 0, 2));
+    auto target = static_cast<Target>(GetBitRange(op_code, 0, 2));
     return std::make_unique<ADD>(target);
 }
 
@@ -80,10 +57,10 @@ std::string ADD::Print() const {
 }
 
 
-ADC::ADC(ArithTarget target) : target(target) {}
+ADC::ADC(Target target) : target(target) {}
 
 std::unique_ptr<Op> ADC::Decode(uint8_t op_code) {
-    auto target = static_cast<ArithTarget>(GetBitRange(op_code, 0, 2));
+    auto target = static_cast<Target>(GetBitRange(op_code, 0, 2));
     return std::make_unique<ADC>(target);
 }
 

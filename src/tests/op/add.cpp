@@ -5,12 +5,11 @@
 
 #include <gtest/gtest.h>
 
-#include <iostream>
 #include <limits>
 #include <memory>
 
 TEST(ADD, Print) {
-    auto add = ADD(ArithTarget::A);
+    auto add = ADD(Target::A);
 
     std::string expected("ADD, target: A");
     EXPECT_EQ(add.Print(), expected);
@@ -19,7 +18,7 @@ TEST(ADD, Print) {
     add.Op::Print(ss);
     EXPECT_EQ(ss.str(), expected);
 
-    std::unique_ptr<Op> op = std::make_unique<ADD>(ArithTarget::A); 
+    std::unique_ptr<Op> op = std::make_unique<ADD>(Target::A); 
     ss.str("");
     ss.clear();
     ss << *op;

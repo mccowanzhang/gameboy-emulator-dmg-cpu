@@ -1,5 +1,6 @@
 #pragma once 
 
+#include "src/emulator/op/ld.h"
 #include "src/emulator/op/add.h"
 #include "src/emulator/op/nop.h"
 
@@ -13,6 +14,11 @@ struct DecodeRule {
 };
 
 static const std::vector<DecodeRule> kDecodeRules = {
+    {
+        .value = 0b01000000,
+        .mask =  0b11000000,
+        .decoder = &LD::Decode,
+    },
     {
         .value = 0b00000000,
         .mask =  0b11111111,
