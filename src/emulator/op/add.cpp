@@ -41,7 +41,7 @@ void ADD::ExecuteImpl(Registers& registers, Memory& memory) {
             val = memory.Read8(registers.HL());
             break;
         default:
-            LOG(FATAL) << "Unrecognized ADD target\n";
+            LOG(FATAL) << "Unrecognized ADD target";
     }
 
     auto [res, carry_per_bit] = OverflowingAdd<uint8_t>(registers.A, val);

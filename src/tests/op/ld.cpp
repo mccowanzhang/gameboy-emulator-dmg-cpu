@@ -5,75 +5,71 @@
 
 #include <gtest/gtest.h>
 
-TEST(LD, LD_R_R) {
-    auto memory = Memory();
-    auto cpu = CPU(memory);
+class LDTest : public ::testing::Test {
+protected:
+    static constexpr uint8_t kVal1 = 3;
+    static constexpr uint8_t kVal2 = 5;
+    static constexpr uint16_t kAddr = 0x0040;
+    static constexpr uint16_t kStartPC = 0x0000;
+
+    Memory memory;
+    CPU cpu{memory};
+};
+
+TEST_F(LDTest, LD_R_R) {
     std::array<uint8_t, 1> program{
         0b01000001 // LD B, C
     };
-    cpu.memory.WriteProgram(0x0000, program);
-    cpu.registers.B = 3;
-    cpu.registers.C = 5;
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.B = kVal1;
+    cpu.registers.C = kVal2;
     cpu.Step();
     EXPECT_EQ(cpu.registers.B, cpu.registers.C);
-    EXPECT_EQ(cpu.registers.B, 5);
+    EXPECT_EQ(cpu.registers.B, kVal2);
 }
 
-TEST(LD, LD_HLI_R) {
-    auto memory = Memory();
-    auto cpu = CPU(memory);
+TEST_F(LDTest, LD_HLI_R) {
     std::array<uint8_t, 1> program{
         0b01110011 // LD to HLI from E
     };
-    cpu.memory.WriteProgram(0x0000, program);
-    uint8_t val = 5;
-    cpu.registers.E = val;
-    uint16_t addr = 0x0040;
-    cpu.registers.SetHL(addr);
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.E = kVal1;
+    cpu.registers.SetHL(kAddr);
     cpu.Step();
-    EXPECT_EQ(cpu.memory.Read8(addr), val);
+    EXPECT_EQ(cpu.memory.Read8(kAddr), kVal1);
 }
 
-TEST(LD, LD_R_HLI) {
-    auto memory = Memory();
-    auto cpu = CPU(memory);
+TEST_F(LDTest, LD_R_HLI) {
     std::array<uint8_t, 1> program{
         0b01010110 // LD to D from HLI
     };
-    cpu.memory.WriteProgram(0x0000, program);
-    cpu.registers.D = 3;
-    uint8_t val = 5;
-    uint16_t addr = 0x0040;
-    memory.Write8(addr, val);
-    cpu.registers.SetHL(addr);
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.D = kVal1;
+    memory.Write8(kAddr, kVal2);
+    cpu.registers.SetHL(kAddr);
     cpu.Step();
-    EXPECT_EQ(cpu.registers.D, val);
+    EXPECT_EQ(cpu.registers.D, kVal2);
 }
 
-TEST(LD, LD_R_N) {
-    auto memory = Memory();
-    auto cpu = CPU(memory);
-    uint8_t val = 5;
+TEST_F(LDTest, LD_R_N) {
     std::array<uint8_t, 2> program{
         0b00000110, // LD to B from N
-        val,
+        kVal2,
     };
-    cpu.memory.WriteProgram(0x0000, program);
+    cpu.memory.WriteProgram(kStartPC, program);
     cpu.Step();
-    EXPECT_EQ(cpu.registers.B, val);
+    EXPECT_EQ(cpu.registers.B, kVal2);
+    EXPECT_EQ(cpu.registers.PC, 0x0002);
 }
 
-TEST(LD, LD_HLI_N) {
-    auto memory = Memory();
-    auto cpu = CPU(memory);
-    uint8_t val = 5;
+TEST_F(LDTest, LD_HLI_N) {
     std::array<uint8_t, 2> program{
-        0b000110110, // LD to HLI from N
-        val,
+        0b00110110, // LD to HLI from N
+        kVal2,
     };
-    cpu.memory.WriteProgram(0x0000, program);
-    uint16_t addr = 0x0040;
-    cpu.registers.SetHL(addr);
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.SetHL(kAddr);
     cpu.Step();
-    EXPECT_EQ(cpu.memory.Read8(addr), val);
+    EXPECT_EQ(cpu.memory.Read8(kAddr), kVal2);
+    EXPECT_EQ(cpu.registers.PC, 0x0002);
 }
