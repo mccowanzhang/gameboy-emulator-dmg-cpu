@@ -64,3 +64,37 @@ protected:
 private:
     LD_NNI_Mode mode;
 };
+
+enum LDH_C_Mode : bool {
+    CI_A = 0b0,
+    A_CI = 0b1,
+};
+std::string Print(LDH_C_Mode mode);
+
+class LDH_C : public Op {
+public:
+    explicit LDH_C(LDH_C_Mode mode);
+    static std::unique_ptr<Op> Decode(uint8_t op_code);
+    std::string Print() const override;
+protected:
+    void ExecuteImpl(Registers& registers, Memory& memory) override;
+private:
+    LDH_C_Mode mode;
+};
+
+enum LDH_NI_Mode : bool {
+    NI_A = 0b0,
+    A_NI = 0b1,
+};
+std::string Print(LDH_NI_Mode mode);
+
+class LDH_NI : public Op {
+public:
+    explicit LDH_NI(LDH_NI_Mode mode);
+    static std::unique_ptr<Op> Decode(uint8_t op_code);
+    std::string Print() const override;
+protected:
+    void ExecuteImpl(Registers& registers, Memory& memory) override;
+private:
+    LDH_NI_Mode mode;
+};

@@ -192,3 +192,49 @@ TEST_F(LDTest, LD_A_NNI) {
     EXPECT_EQ(cpu.registers.A, kVal1);
     EXPECT_EQ(cpu.registers.PC, 0x0003);
 }
+
+TEST_F(LDTest, LDH_CI_A) {
+    std::array<uint8_t, 1> program{
+        0b11100010, // LDH (C), A
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal1;
+    cpu.registers.C = kAddr;
+    cpu.Step();
+    EXPECT_EQ(memory.Read8(0xFF00 + kAddr), kVal1);
+}
+
+TEST_F(LDTest, LD_A_CI) {
+    std::array<uint8_t, 1> program{
+        0b11110010, // LD A, (CI)
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.C = static_cast<uint8_t>(kAddr);
+    cpu.memory.Write8(0xFF00 + kAddr, kVal1);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, kVal1);
+}
+
+TEST_F(LDTest, LDH_NI_A) {
+    std::array<uint8_t, 2> program{
+        0b11100000, // LDH (n), A
+        kAddr,
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal1;
+    cpu.Step();
+    EXPECT_EQ(memory.Read8(0xFF00 + kAddr), kVal1);
+    EXPECT_EQ(cpu.registers.PC, 0x0002);
+}
+
+TEST_F(LDTest, LD_A_NI) {
+    std::array<uint8_t, 2> program{
+        0b11110000, // LD A, (n)
+        kAddr,
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.memory.Write8(0xFF00 + kAddr, kVal1);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, kVal1);
+    EXPECT_EQ(cpu.registers.PC, 0x0002);
+}

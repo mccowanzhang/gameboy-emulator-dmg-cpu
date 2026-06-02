@@ -229,3 +229,76 @@ void LD_NNI::ExecuteImpl(Registers& registers, Memory& memory) {
 std::string LD_NNI::Print() const {
     return "LD_NNI, mode: " + ::Print(mode);
 }
+
+std::string Print(LDH_C_Mode mode) {
+    switch (mode) {
+        case CI_A:
+            return "CI_A";
+        case A_CI:
+            return "A_CI";
+        default:
+            return "Unrecognized LDH C mode";
+    }
+}
+
+LDH_C::LDH_C(LDH_C_Mode mode) : mode(mode) {}
+
+std::unique_ptr<Op> LDH_C::Decode(uint8_t op_code) {
+    auto mode = static_cast<LDH_C_Mode>(GetBitRange(op_code, 4, 4));
+    return std::make_unique<LDH_C>(mode);
+}
+
+std::string LDH_C::Print() const {
+    return "LDH_C, mode: " + ::Print(mode);
+}
+
+void LDH_C::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint16_t addr = 0xFF00 + static_cast<uint16_t>(registers.C);
+    switch (mode) {
+        case CI_A:
+            memory.Write8(addr, registers.A);
+            break;
+        case A_CI:
+            registers.A = memory.Read8(addr);
+            break;
+        default:
+            LOG(FATAL) << "Unknown LDH C mode";
+    }
+}
+
+std::string Print(LDH_NI_Mode mode){
+    switch (mode) {
+        case NI_A:
+            return "NI_A";
+        case A_NI:
+            return "A_NI";
+        default:
+            return "Unrecognized LDH NI mode";
+    }
+}
+
+LDH_NI::LDH_NI(LDH_NI_Mode mode) : mode(mode) {}
+
+std::unique_ptr<Op> LDH_NI::Decode(uint8_t op_code) {
+    auto mode = static_cast<LDH_NI_Mode>(GetBitRange(op_code, 4, 4));
+    return std::make_unique<LDH_NI>(mode);
+}
+
+std::string LDH_NI::Print() const {
+    return "LDH_NI, mode: " + ::Print(mode);
+}
+
+void LDH_NI::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint8_t n = GetNext8(registers, memory);
+    uint16_t addr = 0xFF00 + static_cast<uint16_t>(n);
+    switch (mode) {
+        case NI_A:
+            memory.Write8(addr, registers.A);
+            break;
+        case A_NI:
+            registers.A = memory.Read8(addr);
+            break;
+        default:
+            LOG(FATAL) << "Unrecognized LDH NI mode";
+    }
+}
