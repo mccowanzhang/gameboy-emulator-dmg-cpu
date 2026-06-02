@@ -191,3 +191,41 @@ void LD_RR::ExecuteImpl(Registers& registers, Memory& memory) {
 std::string LD_RR::Print() const {
     return "LD_RR, mode: " + ::Print(mode);
 }
+
+std::string Print(LD_NNI_Mode mode) {
+    switch (mode) {
+        case NNI_A:
+            return "NNI_A";
+        case A_NNI:
+            return "A_NNI";
+        default:
+            return "Unrecognized LD NNI mode";
+    }
+}
+
+LD_NNI::LD_NNI(LD_NNI_Mode mode) : mode(mode) {}
+
+std::unique_ptr<Op> LD_NNI::Decode(uint8_t op_code) {
+    auto mode = static_cast<LD_NNI_Mode>(GetBitRange(op_code, 4, 4));
+    return std::make_unique<LD_NNI>(mode);
+}
+
+void LD_NNI::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint8_t lsb = GetNext8(registers, memory);
+    uint8_t msb = GetNext8(registers, memory);
+    uint16_t nn = (static_cast<uint16_t>(msb) << 8) | lsb;
+    switch (mode) {
+        case NNI_A:
+            memory.Write8(nn, registers.A);
+            break;
+        case A_NNI:
+            registers.A = memory.Read8(nn);
+            break;
+        default:
+            LOG(FATAL) << "Unrecognized LD NNI mode";
+    }
+}
+
+std::string LD_NNI::Print() const {
+    return "LD_NNI, mode: " + ::Print(mode);
+}

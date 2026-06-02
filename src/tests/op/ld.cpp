@@ -9,8 +9,9 @@ class LDTest : public ::testing::Test {
 protected:
     static constexpr uint8_t kVal1 = 3;
     static constexpr uint8_t kVal2 = 5;
-    static constexpr uint16_t kAddr = 0x0040;
     static constexpr uint16_t kStartPC = 0x0000;
+    static constexpr uint16_t kAddr = 0x0040;
+    static constexpr uint16_t kBigAddr = 0x1040;
 
     Memory memory;
     CPU cpu{memory};
@@ -164,4 +165,30 @@ TEST_F(LDTest, LD_A_HLMINUSI) {
     cpu.Step();
     EXPECT_EQ(cpu.registers.A, kVal1);
     EXPECT_EQ(cpu.registers.HL(), kAddr - 1);
+}
+
+TEST_F(LDTest, LD_NNI_A) {
+    std::array<uint8_t, 3> program{
+        0b11101010, // LD (nn), A
+        static_cast<uint8_t>(kBigAddr & 0xFF), // lsb
+        static_cast<uint8_t>(kBigAddr >> 8), // msb
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal1;
+    cpu.Step();
+    EXPECT_EQ(cpu.memory.Read8(kBigAddr), kVal1);
+    EXPECT_EQ(cpu.registers.PC, 0x0003);
+}
+
+TEST_F(LDTest, LD_A_NNI) {
+    std::array<uint8_t, 3> program{
+        0b11111010, // LD A, (nn)
+        static_cast<uint8_t>(kBigAddr & 0xFF), // lsb
+        static_cast<uint8_t>(kBigAddr >> 8), // msb
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.memory.Write8(kBigAddr, kVal1);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, kVal1);
+    EXPECT_EQ(cpu.registers.PC, 0x0003);
 }

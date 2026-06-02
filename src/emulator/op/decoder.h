@@ -30,6 +30,11 @@ static const std::vector<DecodeRule> kDecodeRules = {
         .decoder = &LD_RR::Decode,
     },
     {
+        .value = 0b11101010,
+        .mask =  0b11101111,
+        .decoder = &LD_NNI::Decode,
+    },
+    {
         .value = 0b00000000,
         .mask =  0b11111111,
         .decoder = &NOP::Decode,

@@ -47,3 +47,20 @@ protected:
 private:
     LD_RR_Mode mode;
 };
+
+enum LD_NNI_Mode : bool {
+    NNI_A = 0b0,
+    A_NNI = 0b1,
+};
+std::string Print(LD_NNI_Mode mode);
+
+class LD_NNI : public Op {
+public:
+    explicit LD_NNI(LD_NNI_Mode mode);
+    static std::unique_ptr<Op> Decode(uint8_t op_code);
+    std::string Print() const override;
+protected:
+    void ExecuteImpl(Registers& registers, Memory& memory) override;
+private:
+    LD_NNI_Mode mode;
+};
