@@ -31,3 +31,5 @@ enum Target : uint8_t {
     HLI = 0b110,
 };
 std::string Print(Target target);
+
+uint8_t GetNext8(Registers& registers, Memory& memory);

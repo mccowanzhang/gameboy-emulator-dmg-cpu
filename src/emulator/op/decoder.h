@@ -10,7 +10,7 @@
 struct DecodeRule {
     uint8_t value;
     uint8_t mask;
-    std::unique_ptr<Op>(*decoder)(uint8_t) ;
+    std::unique_ptr<Op>(*decoder)(uint8_t);
 };
 
 static const std::vector<DecodeRule> kDecodeRules = {
@@ -18,6 +18,11 @@ static const std::vector<DecodeRule> kDecodeRules = {
         .value = 0b01000000,
         .mask =  0b11000000,
         .decoder = &LD::Decode,
+    },
+    {
+        .value = 0b00000110,
+        .mask =  0b11000111,
+        .decoder = &LD_R_N::Decode,
     },
     {
         .value = 0b00000000,

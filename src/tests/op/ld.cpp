@@ -49,3 +49,31 @@ TEST(LD, LD_R_HLI) {
     cpu.Step();
     EXPECT_EQ(cpu.registers.D, val);
 }
+
+TEST(LD, LD_R_N) {
+    auto memory = Memory();
+    auto cpu = CPU(memory);
+    uint8_t val = 5;
+    std::array<uint8_t, 2> program{
+        0b00000110, // LD to B from N
+        val,
+    };
+    cpu.memory.WriteProgram(0x0000, program);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.B, val);
+}
+
+TEST(LD, LD_HLI_N) {
+    auto memory = Memory();
+    auto cpu = CPU(memory);
+    uint8_t val = 5;
+    std::array<uint8_t, 2> program{
+        0b000110110, // LD to HLI from N
+        val,
+    };
+    cpu.memory.WriteProgram(0x0000, program);
+    uint16_t addr = 0x0040;
+    cpu.registers.SetHL(addr);
+    cpu.Step();
+    EXPECT_EQ(cpu.memory.Read8(addr), val);
+}

@@ -78,3 +78,47 @@ void LD::ExecuteImpl(Registers& registers, Memory& memory) {
             LOG(FATAL) << "Unrecognized dest operand\n";
     }
 }
+
+LD_R_N::LD_R_N(Target dest) : dest(dest) {}
+
+std::unique_ptr<Op> LD_R_N::Decode(uint8_t op_code) {
+    auto dest = static_cast<Target>(GetBitRange(op_code, 3, 5));
+    return std::make_unique<LD_R_N>(dest);
+}
+
+std::string LD_R_N::Print() const {
+    return "LD_R_N, dest: " + ::Print(dest);
+}
+
+void LD_R_N::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint8_t val = ::GetNext8(registers, memory);
+
+    switch (dest) {
+        case A:
+            registers.A = val;
+            break;
+        case B:
+            registers.B = val;
+            break;
+        case C:
+            registers.C = val;
+            break;
+        case D:
+            registers.D = val;
+            break;
+        case E:
+            registers.E = val;
+            break;
+        case H:
+            registers.H = val;
+            break;
+        case L:
+            registers.L = val;
+            break;
+        case HLI:
+            memory.Write8(registers.HL(), val);
+            break;
+        default:
+            LOG(FATAL) << "Unrecognized dest operand\n";
+    }
+}

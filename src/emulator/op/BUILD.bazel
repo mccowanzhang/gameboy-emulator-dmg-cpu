@@ -20,6 +20,8 @@ cc_library(
     hdrs = ["op_base.h"],
     deps = [
         "@abseil-cpp//absl/log",
+        "//src/emulator:memory",
+        "//src/emulator:registers",
     ],
 )
 
