@@ -38,3 +38,11 @@ cc_test(
         "//src/emulator/op:add",
     ],
 )
+
+cc_test(
+    name = "stack",
+    srcs = ["stack.cpp"],
+    deps = TEST_DEPS + [
+        "//src/emulator/op:stack",
+    ],
+)

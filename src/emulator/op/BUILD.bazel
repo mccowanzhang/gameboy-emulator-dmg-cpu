@@ -9,6 +9,7 @@ cc_library(
         ":ld",
         ":nop",
         ":add",
+        ":push",
     ],
     visibility = ["//visibility:public"],
 )
@@ -59,3 +60,10 @@ cc_library(
     visibility = ["//visibility:public"],
 )
 
+cc_library(
+    name = "push",
+    srcs = ["push.cpp"],
+    hdrs = ["push.h"],
+    deps = COMMON_OP_DEPS,
+    visibility = ["//visibility:public"],
+)

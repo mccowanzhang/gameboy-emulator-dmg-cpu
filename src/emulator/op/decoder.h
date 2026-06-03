@@ -3,6 +3,7 @@
 #include "src/emulator/op/ld.h"
 #include "src/emulator/op/add.h"
 #include "src/emulator/op/nop.h"
+#include "src/emulator/op/push.h"
 
 #include <memory>
 #include <vector>
@@ -63,6 +64,11 @@ static const std::vector<DecodeRule> kDecodeRules = {
         .value = 0b11100000,
         .mask =  0b11101111,
         .decoder = &LDH_NI::Decode,
+    },
+    {
+        .value = 0b11000101,
+        .mask =  0b11001111,
+        .decoder = &PUSH::Decode,
     },
     {
         .value = 0b00000000,
