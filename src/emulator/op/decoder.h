@@ -50,6 +50,11 @@ static const std::vector<DecodeRule> kDecodeRules = {
         .decoder = &LD_SP_HL::Decode,
     },
     {
+        .value = 0b11111000,
+        .mask =  0b11111111,
+        .decoder = &LD_HL_SPE::Decode,
+    },
+    {
         .value = 0b11100010,
         .mask =  0b11101111,
         .decoder = &LDH_C::Decode,

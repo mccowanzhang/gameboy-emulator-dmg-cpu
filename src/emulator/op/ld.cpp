@@ -376,3 +376,25 @@ std::string LD_SP_HL::Print() const {
 void LD_SP_HL::ExecuteImpl(Registers& registers, Memory& memory) {
     registers.SP = registers.HL();
 }
+
+std::unique_ptr<Op> LD_HL_SPE::Decode(uint8_t op_code) {
+    return std::make_unique<LD_HL_SPE>();
+}
+
+std::string LD_HL_SPE::Print() const {
+    return "LD_HL_SPE";
+}
+
+void LD_HL_SPE::ExecuteImpl(Registers& registers, Memory& memory) {
+    auto e = static_cast<int8_t>(GetNext8(registers, memory));
+    auto [res, carries_per_bit] = OverflowingAdd(
+        registers.SP,
+        static_cast<uint16_t>(static_cast<int16_t>(e))
+    );
+
+    registers.SetHL(res);
+    registers.SetFlag(Flag::Z_FLAG, false);
+    registers.SetFlag(Flag::N_FLAG, false);
+    registers.SetFlag(Flag::H_FLAG, carries_per_bit[3]);
+    registers.SetFlag(Flag::C_FLAG, carries_per_bit[7]);
+}

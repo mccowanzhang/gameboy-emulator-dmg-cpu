@@ -274,3 +274,19 @@ TEST_F(LDTest, LD_SP_HL) {
     cpu.Step();
     EXPECT_EQ(cpu.registers.SP, kBigVal1);
 }
+
+TEST_F(LDTest, LD_HL_SPE) {
+    int8_t e = -1;
+    std::array<uint8_t, 2> program{
+        0b11111000, // LD HL, SP+e
+        static_cast<uint8_t>(e),
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.SP = kBigVal1;
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.HL(), kBigVal1 + e);
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::Z_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::N_FLAG));
+    EXPECT_TRUE(cpu.registers.GetFlag(Flag::H_FLAG));
+    EXPECT_TRUE(cpu.registers.GetFlag(Flag::C_FLAG));
+}
