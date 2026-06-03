@@ -36,3 +36,10 @@ TEST(Util, GetBitRange) {
     auto r3 = GetBitRange<uint8_t>(0b10101011, 4, 7);
     EXPECT_EQ(r3, 0b00001010);
 }
+
+TEST(Util, BitOperations) {
+    EXPECT_EQ(Promote(0x12, 0x34), 0x3412);
+    EXPECT_EQ(PromoteH(0x12), 0xFF12);
+    EXPECT_EQ(MSB(0x1234), 0x12);
+    EXPECT_EQ(LSB(0x1234), 0x34);
+}

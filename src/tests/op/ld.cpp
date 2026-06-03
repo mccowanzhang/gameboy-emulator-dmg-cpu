@@ -171,8 +171,8 @@ TEST_F(LDTest, LD_A_HLMINUSI) {
 TEST_F(LDTest, LD_NNI_A) {
     std::array<uint8_t, 3> program{
         0b11101010, // LD (nn), A
-        static_cast<uint8_t>(kBigAddr & 0xFF), // lsb
-        static_cast<uint8_t>(kBigAddr >> 8), // msb
+        LSB(kBigAddr),
+        MSB(kBigAddr),
     };
     cpu.memory.WriteProgram(kStartPC, program);
     cpu.registers.A = kVal1;
@@ -184,8 +184,8 @@ TEST_F(LDTest, LD_NNI_A) {
 TEST_F(LDTest, LD_A_NNI) {
     std::array<uint8_t, 3> program{
         0b11111010, // LD A, (nn)
-        static_cast<uint8_t>(kBigAddr & 0xFF), // lsb
-        static_cast<uint8_t>(kBigAddr >> 8), // msb
+        LSB(kBigAddr),
+        MSB(kBigAddr),
     };
     cpu.memory.WriteProgram(kStartPC, program);
     cpu.memory.Write8(kBigAddr, kVal1);
@@ -202,7 +202,7 @@ TEST_F(LDTest, LDH_CI_A) {
     cpu.registers.A = kVal1;
     cpu.registers.C = kAddr;
     cpu.Step();
-    EXPECT_EQ(memory.Read8(0xFF00 + kAddr), kVal1);
+    EXPECT_EQ(memory.Read8(PromoteH(kAddr)), kVal1);
 }
 
 TEST_F(LDTest, LD_A_CI) {
@@ -211,7 +211,7 @@ TEST_F(LDTest, LD_A_CI) {
     };
     cpu.memory.WriteProgram(kStartPC, program);
     cpu.registers.C = static_cast<uint8_t>(kAddr);
-    cpu.memory.Write8(0xFF00 + kAddr, kVal1);
+    cpu.memory.Write8(PromoteH(kAddr), kVal1);
     cpu.Step();
     EXPECT_EQ(cpu.registers.A, kVal1);
 }
@@ -224,7 +224,7 @@ TEST_F(LDTest, LDH_NI_A) {
     cpu.memory.WriteProgram(kStartPC, program);
     cpu.registers.A = kVal1;
     cpu.Step();
-    EXPECT_EQ(memory.Read8(0xFF00 + kAddr), kVal1);
+    EXPECT_EQ(memory.Read8(PromoteH(kAddr)), kVal1);
     EXPECT_EQ(cpu.registers.PC, 0x0002);
 }
 
@@ -234,7 +234,7 @@ TEST_F(LDTest, LD_A_NI) {
         kAddr,
     };
     cpu.memory.WriteProgram(kStartPC, program);
-    cpu.memory.Write8(0xFF00 + kAddr, kVal1);
+    cpu.memory.Write8(PromoteH(kAddr), kVal1);
     cpu.Step();
     EXPECT_EQ(cpu.registers.A, kVal1);
     EXPECT_EQ(cpu.registers.PC, 0x0002);
@@ -243,8 +243,8 @@ TEST_F(LDTest, LD_A_NI) {
 TEST_F(LDTest, LD_BC_NN) {
     std::array<uint8_t, 3> program{
         0b00000001, // LD BC, nn
-        static_cast<uint8_t>(kBigVal1 & 0xFF), // lsb
-        static_cast<uint8_t>(kBigVal1 >> 8), // msb
+        LSB(kBigVal1),
+        MSB(kBigVal1),
     };
     cpu.memory.WriteProgram(kStartPC, program);
     cpu.Step();

@@ -1,5 +1,7 @@
 #include "memory.h"
 
+#include "src/emulator/util.h"
+
 #include "absl/log/log.h"
 
 #include <bitset>
@@ -27,18 +29,16 @@ void Memory::Write8(uint16_t addr, uint8_t val) {
 }
 
 uint16_t Memory::Read16(uint16_t addr) const {
-    uint8_t low = memory_[addr];
-    uint8_t high = memory_[addr + 1];
-    LOG(INFO) << "Read: " << std::bitset<16>(static_cast<uint16_t>((high << 8) | low))
+    uint8_t lsb = memory_[addr];
+    uint8_t msb = memory_[addr + 1];
+    LOG(INFO) << "Read: " << std::bitset<16>(Promote(lsb, msb))
               << " at addr: " << std::hex << addr; 
-    return static_cast<uint16_t>((high << 8) | low);
+    return Promote(lsb, msb);
 }
 
 void Memory::Write16(uint16_t addr, uint16_t val) {
-    uint8_t low = val & 0xFF;
-    memory_[addr] = low;
-    uint8_t high = (val >> 8) & 0xFF;
-    memory_[addr + 1] = high;
+    memory_[addr] = LSB(val);
+    memory_[addr + 1] = MSB(val);
     LOG(INFO) << "Wrote: " << std::bitset<16>(val)
               << " at addr: " << std::hex << addr;
 }

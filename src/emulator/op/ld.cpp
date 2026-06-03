@@ -213,7 +213,7 @@ std::unique_ptr<Op> LD_NNI::Decode(uint8_t op_code) {
 void LD_NNI::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t lsb = GetNext8(registers, memory);
     uint8_t msb = GetNext8(registers, memory);
-    uint16_t nn = (static_cast<uint16_t>(msb) << 8) | lsb;
+    uint16_t nn = Promote(lsb, msb);
     switch (mode) {
         case NNI_A:
             memory.Write8(nn, registers.A);
@@ -253,7 +253,7 @@ std::string LDH_C::Print() const {
 }
 
 void LDH_C::ExecuteImpl(Registers& registers, Memory& memory) {
-    uint16_t addr = 0xFF00 + static_cast<uint16_t>(registers.C);
+    uint16_t addr = PromoteH(registers.C);
     switch (mode) {
         case CI_A:
             memory.Write8(addr, registers.A);
@@ -290,7 +290,7 @@ std::string LDH_NI::Print() const {
 
 void LDH_NI::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t n = GetNext8(registers, memory);
-    uint16_t addr = 0xFF00 + static_cast<uint16_t>(n);
+    uint16_t addr = PromoteH(n);
     switch (mode) {
         case NI_A:
             memory.Write8(addr, registers.A);
@@ -332,7 +332,7 @@ std::string LD_RR_NN::Print() const {
 void LD_RR_NN::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t lsb = GetNext8(registers, memory);
     uint8_t msb = GetNext8(registers, memory);
-    uint16_t nn = (static_cast<uint16_t>(msb) << 8) | lsb;
+    uint16_t nn = Promote(lsb, msb);
 
     switch (target) {
         case BC:

@@ -50,3 +50,19 @@ T GetBitRange(T value, uint8_t low, uint8_t high) { // low, high inclusive
     T mask = ((T{1} << (high - low + 1)) - 1) << low;
     return (value & mask) >> low;
 }
+
+inline uint16_t Promote(uint8_t lsb, uint8_t msb) {
+    return (static_cast<uint16_t>(msb) << 8) | lsb;
+}
+
+inline uint16_t PromoteH(uint8_t val) {
+    return Promote(val, 0xFF);
+}
+
+inline uint8_t LSB(uint16_t val) {
+    return static_cast<uint8_t>(val & 0xFF);
+}
+
+inline uint8_t MSB(uint16_t val) {
+    return static_cast<uint8_t>(val >> 8);
+}
