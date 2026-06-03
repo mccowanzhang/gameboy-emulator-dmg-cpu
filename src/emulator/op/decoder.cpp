@@ -9,6 +9,7 @@
 std::unique_ptr<Op> DecodeOp(uint8_t op_code) {
     for (const auto& rule : kDecodeRules) {
         if ((op_code & rule.mask) == rule.value) {
+            LOG(INFO) << "Decoded: " << rule.decoder(op_code)->Print();
             return rule.decoder(op_code);
         }
     }

@@ -9,7 +9,7 @@
 #include <iostream>
 
 void Op::Execute(Registers& registers, Memory& memory) {
-    LOG(INFO) << "Executing " << Print();
+    LOG(INFO) << "Executing: " << Print();
     ExecuteImpl(registers, memory);
 }
 
