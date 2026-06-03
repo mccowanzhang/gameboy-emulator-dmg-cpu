@@ -364,3 +364,15 @@ void LD_NNI_SP::ExecuteImpl(Registers& registers, Memory& memory) {
     uint16_t nn = Promote(lsb, msb);
     memory.Write16(nn, registers.SP);
 }
+
+std::unique_ptr<Op> LD_SP_HL::Decode(uint8_t op_code) {
+    return std::make_unique<LD_SP_HL>();
+}
+
+std::string LD_SP_HL::Print() const {
+    return "LD_SP_HL";
+}
+
+void LD_SP_HL::ExecuteImpl(Registers& registers, Memory& memory) {
+    registers.SP = registers.HL();
+}

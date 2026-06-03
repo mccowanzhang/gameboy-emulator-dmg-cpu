@@ -264,3 +264,13 @@ TEST_F(LDTest, LD_NNI_SP) {
     EXPECT_EQ(cpu.memory.Read16(kBigAddr), kBigVal1);
     EXPECT_EQ(cpu.registers.PC, 0x0003);
 }
+
+TEST_F(LDTest, LD_SP_HL) {
+    std::array<uint8_t, 1> program{
+        0b11111001, // LD SP, HL
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.SetHL(kBigVal1);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.SP, kBigVal1);
+}
