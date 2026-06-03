@@ -349,3 +349,18 @@ void LD_RR_NN::ExecuteImpl(Registers& registers, Memory& memory) {
             break;
     }
 }
+
+std::unique_ptr<Op> LD_NNI_SP::Decode(uint8_t op_code) {
+    return std::make_unique<LD_NNI_SP>();
+}
+
+std::string LD_NNI_SP::Print() const {
+    return "LD_NNI_SP";
+}
+
+void LD_NNI_SP::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint8_t lsb = GetNext8(registers, memory);
+    uint8_t msb = GetNext8(registers, memory);
+    uint16_t nn = Promote(lsb, msb);
+    memory.Write16(nn, registers.SP);
+}

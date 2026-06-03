@@ -251,3 +251,16 @@ TEST_F(LDTest, LD_BC_NN) {
     EXPECT_EQ(cpu.registers.BC(), kBigVal1);
     EXPECT_EQ(cpu.registers.PC, 0x0003);
 }
+
+TEST_F(LDTest, LD_NNI_SP) {
+    std::array<uint8_t, 3> program{
+        0b00001000, // LD (nn), SP
+        LSB(kBigAddr),
+        MSB(kBigAddr),
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.SP = kBigVal1;
+    cpu.Step();
+    EXPECT_EQ(cpu.memory.Read16(kBigAddr), kBigVal1);
+    EXPECT_EQ(cpu.registers.PC, 0x0003);
+}

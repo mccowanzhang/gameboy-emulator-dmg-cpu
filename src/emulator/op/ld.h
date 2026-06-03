@@ -117,3 +117,11 @@ protected:
 private:
     LD_RR_NN_Target target;
 };
+
+class LD_NNI_SP : public Op {
+public:
+    static std::unique_ptr<Op> Decode(uint8_t op_code);
+    std::string Print() const override;
+protected:
+    void ExecuteImpl(Registers& registers, Memory& memory) override;
+};
