@@ -9,6 +9,7 @@ class LDTest : public ::testing::Test {
 protected:
     static constexpr uint8_t kVal1 = 3;
     static constexpr uint8_t kVal2 = 5;
+    static constexpr uint16_t kBigVal1 = 0x1234;
     static constexpr uint16_t kStartPC = 0x0000;
     static constexpr uint16_t kAddr = 0x0040;
     static constexpr uint16_t kBigAddr = 0x1040;
@@ -237,4 +238,16 @@ TEST_F(LDTest, LD_A_NI) {
     cpu.Step();
     EXPECT_EQ(cpu.registers.A, kVal1);
     EXPECT_EQ(cpu.registers.PC, 0x0002);
+}
+
+TEST_F(LDTest, LD_BC_NN) {
+    std::array<uint8_t, 3> program{
+        0b00000001, // LD BC, nn
+        static_cast<uint8_t>(kBigVal1 & 0xFF), // lsb
+        static_cast<uint8_t>(kBigVal1 >> 8), // msb
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.BC(), kBigVal1);
+    EXPECT_EQ(cpu.registers.PC, 0x0003);
 }

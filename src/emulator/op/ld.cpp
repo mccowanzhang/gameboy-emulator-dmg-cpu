@@ -302,3 +302,50 @@ void LDH_NI::ExecuteImpl(Registers& registers, Memory& memory) {
             LOG(FATAL) << "Unrecognized LDH NI mode";
     }
 }
+
+std::string Print(LD_RR_NN_Target target) {
+    switch (target) {
+        case BC:
+            return "BC";
+        case DE:
+            return "DE";
+        case HL:
+            return "HL";
+        case SP:
+            return "SP";
+        default:
+            return "Unrecognized LD RR NN target";
+    }
+}
+
+LD_RR_NN::LD_RR_NN(LD_RR_NN_Target target) : target(target) {}
+
+std::unique_ptr<Op> LD_RR_NN::Decode(uint8_t op_code) {
+    auto target = static_cast<LD_RR_NN_Target>(GetBitRange(op_code, 4, 5));
+    return std::make_unique<LD_RR_NN>(target);
+}
+
+std::string LD_RR_NN::Print() const {
+    return "LD_RR_NN, target: " + ::Print(target);
+}
+
+void LD_RR_NN::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint8_t lsb = GetNext8(registers, memory);
+    uint8_t msb = GetNext8(registers, memory);
+    uint16_t nn = (static_cast<uint16_t>(msb) << 8) | lsb;
+
+    switch (target) {
+        case BC:
+            registers.SetBC(nn);
+            break;
+        case DE:
+            registers.SetDE(nn);
+            break;
+        case HL:
+            registers.SetHL(nn);
+            break;
+        case SP:
+            registers.SP = nn;
+            break;
+    }
+}

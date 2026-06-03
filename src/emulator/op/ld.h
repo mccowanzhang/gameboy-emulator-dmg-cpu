@@ -98,3 +98,22 @@ protected:
 private:
     LDH_NI_Mode mode;
 };
+
+enum LD_RR_NN_Target : uint8_t {
+    BC = 0b00,
+    DE = 0b01,
+    HL = 0b10,
+    SP = 0b11,
+};
+std::string Print(LD_RR_NN_Target target);
+
+class LD_RR_NN : public Op {
+public:
+    explicit LD_RR_NN(LD_RR_NN_Target target);
+    static std::unique_ptr<Op> Decode(uint8_t op_code);
+    std::string Print() const override;
+protected:
+    void ExecuteImpl(Registers& registers, Memory& memory) override;
+private:
+    LD_RR_NN_Target target;
+};
