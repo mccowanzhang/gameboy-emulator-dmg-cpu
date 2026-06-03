@@ -36,6 +36,21 @@ std::string Print(Target target) {
     }
 }
 
+std::string Print(RR_Target target) {
+    switch (target) {
+        case BC:
+            return "BC";
+        case DE:
+            return "DE";
+        case HL:
+            return "HL";
+        case SP:
+            return "SP";
+        default:
+            return "Unrecognized LD RR NN target";
+    }
+}
+
 uint8_t GetNext8(Registers& registers, Memory& memory) {
     uint8_t val = memory.Read8(registers.PC);
     registers.PC += 1;

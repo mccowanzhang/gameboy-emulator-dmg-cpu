@@ -32,5 +32,13 @@ enum Target : uint8_t {
 };
 std::string Print(Target target);
 
+enum RR_Target : uint8_t {
+    BC = 0b00,
+    DE = 0b01,
+    HL = 0b10,
+    SP = 0b11,
+};
+std::string Print(RR_Target target);
+
 uint8_t GetNext8(Registers& registers, Memory& memory);
 uint16_t GetNext16(Registers& registers, Memory& memory);

@@ -46,7 +46,7 @@ void LD::ExecuteImpl(Registers& registers, Memory& memory) {
             val = memory.Read8(registers.HL());
             break;
         default:
-            LOG(FATAL) << "Unrecognized source operand\n";
+            LOG(FATAL) << "Unrecognized source operand";
     }
 
     switch (dest) {
@@ -75,7 +75,7 @@ void LD::ExecuteImpl(Registers& registers, Memory& memory) {
             memory.Write8(registers.HL(), val);
             break;
         default:
-            LOG(FATAL) << "Unrecognized dest operand\n";
+            LOG(FATAL) << "Unrecognized dest operand";
     }
 }
 
@@ -119,7 +119,7 @@ void LD_R_N::ExecuteImpl(Registers& registers, Memory& memory) {
             memory.Write8(registers.HL(), val);
             break;
         default:
-            LOG(FATAL) << "Unrecognized dest operand\n";
+            LOG(FATAL) << "Unrecognized dest operand";
     }
 }
 
@@ -303,25 +303,10 @@ void LDH_NI::ExecuteImpl(Registers& registers, Memory& memory) {
     }
 }
 
-std::string Print(LD_RR_NN_Target target) {
-    switch (target) {
-        case BC:
-            return "BC";
-        case DE:
-            return "DE";
-        case HL:
-            return "HL";
-        case SP:
-            return "SP";
-        default:
-            return "Unrecognized LD RR NN target";
-    }
-}
-
-LD_RR_NN::LD_RR_NN(LD_RR_NN_Target target) : target(target) {}
+LD_RR_NN::LD_RR_NN(RR_Target target) : target(target) {}
 
 std::unique_ptr<Op> LD_RR_NN::Decode(uint8_t op_code) {
-    auto target = static_cast<LD_RR_NN_Target>(GetBitRange(op_code, 4, 5));
+    auto target = static_cast<RR_Target>(GetBitRange(op_code, 4, 5));
     return std::make_unique<LD_RR_NN>(target);
 }
 
