@@ -37,9 +37,13 @@ std::string Print(Target target) {
 }
 
 uint8_t GetNext8(Registers& registers, Memory& memory) {
-    LOG(INFO) << "Fetch 8 bits from addr " << std::hex << registers.PC;
     uint8_t val = memory.Read8(registers.PC);
-    LOG(INFO) << "Fetched 8 bits: " << std::bitset<8>(val);
     registers.PC += 1;
+    return val;
+}
+
+uint16_t GetNext16(Registers& registers, Memory& memory) {
+    uint8_t val = memory.Read16(registers.PC);
+    registers.PC += 2;
     return val;
 }

@@ -14,8 +14,4 @@ public:
 
     Memory& memory;
     Registers registers;
-
-private:
-    uint8_t Fetch8();
-    uint16_t Fetch16();
 };

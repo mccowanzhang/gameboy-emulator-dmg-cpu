@@ -18,21 +18,7 @@ void CPU::Reset() {
 }
 
 void CPU::Step() {
-    uint8_t op_code = Fetch8();
+    uint8_t op_code = GetNext8(registers, memory);
     auto op = DecodeOp(op_code);
     op->Execute(registers, memory);
-}
-
-uint8_t CPU::Fetch8() {
-    LOG(INFO) << "Fetch 8 bits from addr " << std::hex << registers.PC;
-    uint8_t val = memory.Read8(registers.PC);
-    LOG(INFO) << "Fetched 8 bits: " << std::bitset<8>(val);
-    registers.PC += 1;
-    return val;
-}
-
-uint16_t CPU::Fetch16() {
-    uint8_t val = memory.Read16(registers.PC);
-    registers.PC += 2;
-    return val;
 }

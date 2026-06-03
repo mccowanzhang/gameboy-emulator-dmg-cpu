@@ -11,6 +11,9 @@ cc_library(
     name = "memory",
     srcs = ["memory.cpp"],
     hdrs = ["memory.h"],
+    deps = [
+        "@abseil-cpp//absl/log",
+    ],
     visibility = ["//visibility:public"],
 )
 

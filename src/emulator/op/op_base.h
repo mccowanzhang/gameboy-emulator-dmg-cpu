@@ -33,3 +33,4 @@ enum Target : uint8_t {
 std::string Print(Target target);
 
 uint8_t GetNext8(Registers& registers, Memory& memory);
+uint16_t GetNext16(Registers& registers, Memory& memory);
