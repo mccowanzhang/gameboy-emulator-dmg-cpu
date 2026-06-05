@@ -1,4 +1,4 @@
-#include "src/emulator/op/push.h"
+#include "src/emulator/op/stack.h"
 
 #include "src/emulator/CPU.h"
 #include "src/emulator/memory.h"
@@ -8,7 +8,7 @@
 #include <limits>
 #include <memory>
 
-class PUSHTest : public ::testing::Test {
+class STACKTest : public ::testing::Test {
 protected:
     static constexpr uint16_t kBigVal1 = 0x1234;
     static constexpr uint16_t kAddr = 0x0040;
@@ -18,7 +18,7 @@ protected:
     CPU cpu{memory};
 };
 
-TEST_F(PUSHTest, PUSH) {
+TEST_F(STACKTest, PUSH) {
     std::array<uint8_t, 1> program{
         0b11000101, // PUSH BC
     };
@@ -30,7 +30,7 @@ TEST_F(PUSHTest, PUSH) {
     EXPECT_EQ(cpu.memory.Read16(kAddr - 2), kBigVal1);
 }
 
-TEST_F(PUSHTest, PUSH_SP) {
+TEST_F(STACKTest, PUSH_SP) {
     std::array<uint8_t, 1> program{
         0b11110101, // PUSH SP
     };
