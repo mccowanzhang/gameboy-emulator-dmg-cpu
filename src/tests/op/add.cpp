@@ -45,6 +45,22 @@ TEST_F(ADDTest, ADD_HLI) {
     EXPECT_FALSE(cpu.registers.GetFlag(Flag::C_FLAG));
 }
 
+TEST_F(ADDTest, ADD_N) {
+    std::array<uint8_t, 2> program{
+        0b11000110, // ADD_N
+        kVal2,
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal1;
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, kVal1 + kVal2);
+    EXPECT_EQ(cpu.registers.PC, 0x2);
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::Z_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::N_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::H_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::C_FLAG));
+}
+
 TEST_F(ADDTest, ADC) {
     std::array<uint8_t, 2> program{
         0b10000000, // ADD B to A

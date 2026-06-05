@@ -6,6 +6,15 @@
 
 #include "absl/log/log.h"
 
+void ADD(Registers& registers, uint8_t val) {
+    auto [res, carry_per_bit] = OverflowingAdd<uint8_t>(registers.A, val);
+    registers.A = res;
+    registers.SetFlag(Z_FLAG, res == 0);
+    registers.SetFlag(N_FLAG, false);
+    registers.SetFlag(H_FLAG, carry_per_bit[3]);
+    registers.SetFlag(C_FLAG, carry_per_bit[7]);
+}
+
 ADD::ADD(Target target) : target(target) {}
 
 std::unique_ptr<Op> ADD::Decode(uint8_t op_code) {
@@ -44,18 +53,25 @@ void ADD::ExecuteImpl(Registers& registers, Memory& memory) {
             LOG(FATAL) << "Unrecognized ADD target";
     }
 
-    auto [res, carry_per_bit] = OverflowingAdd<uint8_t>(registers.A, val);
-    registers.A = res;
-    registers.SetFlag(Z_FLAG, res == 0);
-    registers.SetFlag(N_FLAG, false);
-    registers.SetFlag(H_FLAG, carry_per_bit[3]);
-    registers.SetFlag(C_FLAG, carry_per_bit[7]);
+    ::ADD(registers, val);
 }
 
 std::string ADD::Print() const {
     return "ADD, target: " + ::Print(target);
 }
 
+std::unique_ptr<Op> ADD_N::Decode(uint8_t op_code) {
+    return std::make_unique<ADD_N>();
+}
+
+std::string ADD_N::Print() const {
+    return "ADD_N";
+}
+
+void ADD_N::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint8_t n = GetNext8(registers, memory);
+    ::ADD(registers, n);
+}
 
 ADC::ADC(Target target) : target(target) {}
 
