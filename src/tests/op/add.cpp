@@ -100,3 +100,16 @@ TEST_F(ADDTest, ADC_HLI) {
     EXPECT_FALSE(cpu.registers.GetFlag(Flag::C_FLAG));
     // TODO: TEST HLI
 }
+
+TEST_F(ADDTest, ADC_N) {
+    std::array<uint8_t, 2> program{
+        0b11001110, // ADC N
+        kVal1,
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal2;
+    cpu.registers.SetFlag(Flag::C_FLAG, true);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.PC, 0x0002);
+    EXPECT_EQ(cpu.registers.A, kVal1 + kVal2 + 1);
+}

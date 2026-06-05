@@ -15,6 +15,14 @@ void ADD(Registers& registers, uint8_t val) {
     registers.SetFlag(C_FLAG, carry_per_bit[7]);
 }
 
+void ADC(Registers& registers, uint8_t val) {
+    auto [res1, carry_per_bit1] = OverflowingAdd<uint8_t>(
+        val,
+        static_cast<uint8_t>(registers.GetFlag(Flag::C_FLAG))
+    );
+    ADD(registers, res1);
+}
+
 ADD::ADD(Target target) : target(target) {}
 
 std::unique_ptr<Op> ADD::Decode(uint8_t op_code) {
@@ -111,18 +119,22 @@ void ADC::ExecuteImpl(Registers& registers, Memory& memory) {
             LOG(FATAL) << "Unrecognized ADC target\n";
     }
 
-    auto [res1, carry_per_bit1] = OverflowingAdd<uint8_t>(registers.A, val);
-    auto [res2, carry_per_bit2] = OverflowingAdd<uint8_t>(
-        res1, 
-        static_cast<uint8_t>(registers.GetFlag(Flag::C_FLAG))
-    );
-    registers.A = res2;
-    registers.SetFlag(Z_FLAG, res2 == 0);
-    registers.SetFlag(N_FLAG, false);
-    registers.SetFlag(H_FLAG, carry_per_bit1[3] || carry_per_bit2[3]);
-    registers.SetFlag(C_FLAG, carry_per_bit1[7] || carry_per_bit1[7]);
+    ::ADC(registers, val);
 }
 
 std::string ADC::Print() const {
     return "ADC, target: " + ::Print(target);
+}
+
+std::unique_ptr<Op> ADC_N::Decode(uint8_t op_code) {
+    return std::make_unique<ADC_N>();
+}
+
+std::string ADC_N::Print() const {
+    return "ADC_N";
+}
+
+void ADC_N::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint8_t n = GetNext8(registers, memory);
+    ::ADC(registers, n);
 }
