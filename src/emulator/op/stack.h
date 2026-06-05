@@ -22,3 +22,14 @@ protected:
 private:
     Stack_Target target;
 };
+
+class POP : public Op {
+public:
+    explicit POP(Stack_Target target);
+    static std::unique_ptr<Op> Decode(uint8_t op_code);
+    std::string Print() const override;
+protected:
+    void ExecuteImpl(Registers& registers, Memory& memory) override;
+private:
+    Stack_Target target;
+};

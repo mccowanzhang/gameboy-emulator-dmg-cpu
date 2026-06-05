@@ -71,6 +71,11 @@ static const std::vector<DecodeRule> kDecodeRules = {
         .decoder = &PUSH::Decode,
     },
     {
+        .value = 0b11000001,
+        .mask =  0b11001111,
+        .decoder = &POP::Decode,
+    },
+    {
         .value = 0b00000000,
         .mask =  0b11111111,
         .decoder = &NOP::Decode,

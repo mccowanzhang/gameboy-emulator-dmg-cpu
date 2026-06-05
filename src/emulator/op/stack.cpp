@@ -47,3 +47,34 @@ void PUSH::ExecuteImpl(Registers& registers, Memory& memory) {
             LOG(FATAL) << "Unrecognized target";
     }
 }
+
+POP::POP(Stack_Target target) : target(target) {}
+
+std::unique_ptr<Op> POP::Decode(uint8_t op_code) {
+    auto target = static_cast<Stack_Target>(GetBitRange(op_code, 4, 5));
+    return std::make_unique<POP>(target);
+}
+
+std::string POP::Print() const {
+    return "POP, target: " + ::Print(target);
+}
+
+void POP::ExecuteImpl(Registers& registers, Memory& memory) {
+    switch (target) {
+        case Stack_Target::BC:
+            registers.SetBC(memory.Read16(registers.SP));
+            break;
+        case Stack_Target::DE:
+            registers.SetDE(memory.Read16(registers.SP));
+            break;
+        case Stack_Target::HL:
+            registers.SetHL(memory.Read16(registers.SP));
+            break;
+        case Stack_Target::AF:
+            registers.SetAF(memory.Read16(registers.SP));
+            break;
+        default:
+            LOG(FATAL) << "Unrecognized target";
+    }
+    registers.SP = registers.SP + 2;
+}
