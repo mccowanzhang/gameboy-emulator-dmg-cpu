@@ -15,21 +15,21 @@ void Op::Execute(Registers& registers, Memory& memory) {
 
 std::string Print(Target target) {
     switch (target) {
-        case A:
+        case Target::A:
             return "A";
-        case B:
+        case Target::B:
             return "B";
-        case C:
+        case Target::C:
             return "C";
-        case D:
+        case Target::D:
             return "D";
-        case E:
+        case Target::E:
             return "E";
-        case H:
+        case Target::H:
             return "H";
-        case L:
+        case Target::L:
             return "L";
-        case HLI:
+        case Target::HLI:
             return "HLI";
         default:
             return "Unrecognized target";
@@ -38,13 +38,13 @@ std::string Print(Target target) {
 
 std::string Print(RR_Target target) {
     switch (target) {
-        case BC:
+        case RR_Target::BC:
             return "BC";
-        case DE:
+        case RR_Target::DE:
             return "DE";
-        case HL:
+        case RR_Target::HL:
             return "HL";
-        case SP:
+        case RR_Target::SP:
             return "SP";
         default:
             return "Unrecognized LD RR NN target";

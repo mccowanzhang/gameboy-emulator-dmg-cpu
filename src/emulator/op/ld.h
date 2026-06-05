@@ -25,7 +25,7 @@ private:
     Target dest;
 };
 
-enum LD_RR_Mode : uint8_t {
+enum class LD_RR_Mode : uint8_t {
     BCI_A = 0b000,
     A_BCI = 0b001,
     DEI_A = 0b010,
@@ -48,7 +48,7 @@ private:
     LD_RR_Mode mode;
 };
 
-enum LD_NNI_Mode : bool {
+enum class LD_NNI_Mode : bool {
     NNI_A = 0b0,
     A_NNI = 0b1,
 };
@@ -65,7 +65,7 @@ private:
     LD_NNI_Mode mode;
 };
 
-enum LDH_C_Mode : bool {
+enum class LDH_C_Mode : bool {
     CI_A = 0b0,
     A_CI = 0b1,
 };
@@ -82,7 +82,7 @@ private:
     LDH_C_Mode mode;
 };
 
-enum LDH_NI_Mode : bool {
+enum class LDH_NI_Mode : bool {
     NI_A = 0b0,
     A_NI = 0b1,
 };

@@ -29,14 +29,3 @@ TEST_F(STACKTest, PUSH) {
     EXPECT_EQ(cpu.registers.SP, kAddr - 2);
     EXPECT_EQ(cpu.memory.Read16(kAddr - 2), kBigVal1);
 }
-
-TEST_F(STACKTest, PUSH_SP) {
-    std::array<uint8_t, 1> program{
-        0b11110101, // PUSH SP
-    };
-    cpu.memory.WriteProgram(kStartPC, program);
-    cpu.registers.SP = kAddr;
-    cpu.Step();
-    EXPECT_EQ(cpu.registers.SP, kAddr - 2);
-    EXPECT_EQ(cpu.memory.Read16(kAddr - 2), kAddr - 2);
-}

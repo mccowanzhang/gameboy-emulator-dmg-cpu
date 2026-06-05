@@ -20,7 +20,7 @@ protected:
     virtual void ExecuteImpl(Registers& registers, Memory& memory) = 0;
 };
 
-enum Target : uint8_t {
+enum class Target : uint8_t {
     A = 0b111,
     B = 0b000,
     C = 0b001,
@@ -32,7 +32,7 @@ enum Target : uint8_t {
 };
 std::string Print(Target target);
 
-enum RR_Target : uint8_t {
+enum class RR_Target : uint8_t {
     BC = 0b00,
     DE = 0b01,
     HL = 0b10,

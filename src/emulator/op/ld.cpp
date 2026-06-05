@@ -21,28 +21,28 @@ std::string LD::Print() const {
 void LD::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t val = 0;
     switch (source) {
-        case A:
+        case Target::A:
             val = registers.A;
             break;
-        case B:
+        case Target::B:
             val = registers.B;
             break;
-        case C:
+        case Target::C:
             val = registers.C;
             break;
-        case D:
+        case Target::D:
             val = registers.D;
             break;
-        case E:
+        case Target::E:
             val = registers.E;
             break;
-        case H:
+        case Target::H:
             val = registers.H;
             break;
-        case L:
+        case Target::L:
             val = registers.L;
             break;
-        case HLI:
+        case Target::HLI:
             val = memory.Read8(registers.HL());
             break;
         default:
@@ -50,28 +50,28 @@ void LD::ExecuteImpl(Registers& registers, Memory& memory) {
     }
 
     switch (dest) {
-        case A:
+        case Target::A:
             registers.A = val;
             break;
-        case B:
+        case Target::B:
             registers.B = val;
             break;
-        case C:
+        case Target::C:
             registers.C = val;
             break;
-        case D:
+        case Target::D:
             registers.D = val;
             break;
-        case E:
+        case Target::E:
             registers.E = val;
             break;
-        case H:
+        case Target::H:
             registers.H = val;
             break;
-        case L:
+        case Target::L:
             registers.L = val;
             break;
-        case HLI:
+        case Target::HLI:
             memory.Write8(registers.HL(), val);
             break;
         default:
@@ -94,28 +94,28 @@ void LD_R_N::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t val = ::GetNext8(registers, memory);
 
     switch (dest) {
-        case A:
+        case Target::A:
             registers.A = val;
             break;
-        case B:
+        case Target::B:
             registers.B = val;
             break;
-        case C:
+        case Target::C:
             registers.C = val;
             break;
-        case D:
+        case Target::D:
             registers.D = val;
             break;
-        case E:
+        case Target::E:
             registers.E = val;
             break;
-        case H:
+        case Target::H:
             registers.H = val;
             break;
-        case L:
+        case Target::L:
             registers.L = val;
             break;
-        case HLI:
+        case Target::HLI:
             memory.Write8(registers.HL(), val);
             break;
         default:
@@ -125,21 +125,21 @@ void LD_R_N::ExecuteImpl(Registers& registers, Memory& memory) {
 
 std::string Print(LD_RR_Mode mode) {
     switch (mode) {
-        case BCI_A:
+        case LD_RR_Mode::BCI_A:
             return "BCI_A";
-        case A_BCI:
+        case LD_RR_Mode::A_BCI:
             return "A_BCI";
-        case DEI_A:
+        case LD_RR_Mode::DEI_A:
             return "DEI_A";
-        case A_DEI:
+        case LD_RR_Mode::A_DEI:
             return "A_DEI";
-        case HLPLUSI_A:
+        case LD_RR_Mode::HLPLUSI_A:
             return "HLPLUSI_A";
-        case A_HLPLUSI:
+        case LD_RR_Mode::A_HLPLUSI:
             return "A_HLPLUSI";
-        case HLMINUSI_A:
+        case LD_RR_Mode::HLMINUSI_A:
             return "HLMINUSI_A";
-        case A_HLMINUSI:
+        case LD_RR_Mode::A_HLMINUSI:
             return "A_HLMINUSI";
         default:
             return "Unrecognized LD RR mode";
@@ -155,31 +155,31 @@ std::unique_ptr<Op> LD_RR::Decode(uint8_t op_code) {
 
 void LD_RR::ExecuteImpl(Registers& registers, Memory& memory) {
     switch (mode) {
-        case BCI_A:
+        case LD_RR_Mode::BCI_A:
             memory.Write8(registers.BC(), registers.A);
             break;
-        case A_BCI:
+        case LD_RR_Mode::A_BCI:
             registers.A = memory.Read8(registers.BC());
             break;
-        case DEI_A:
+        case LD_RR_Mode::DEI_A:
             memory.Write8(registers.DE(), registers.A);
             break;
-        case A_DEI:
+        case LD_RR_Mode::A_DEI:
             registers.A = memory.Read8(registers.DE());
             break;
-        case HLPLUSI_A:
+        case LD_RR_Mode::HLPLUSI_A:
             memory.Write8(registers.HL(), registers.A);
             registers.IncHL();
             break;
-        case A_HLPLUSI:
+        case LD_RR_Mode::A_HLPLUSI:
             registers.A = memory.Read8(registers.HL());
             registers.IncHL();
             break;
-        case HLMINUSI_A:
+        case LD_RR_Mode::HLMINUSI_A:
             memory.Write8(registers.HL(), registers.A);
             registers.DecHL();
             break;
-        case A_HLMINUSI:
+        case LD_RR_Mode::A_HLMINUSI:
             registers.A = memory.Read8(registers.HL());
             registers.DecHL();
             break;
@@ -194,9 +194,9 @@ std::string LD_RR::Print() const {
 
 std::string Print(LD_NNI_Mode mode) {
     switch (mode) {
-        case NNI_A:
+        case LD_NNI_Mode::NNI_A:
             return "NNI_A";
-        case A_NNI:
+        case LD_NNI_Mode::A_NNI:
             return "A_NNI";
         default:
             return "Unrecognized LD NNI mode";
@@ -215,10 +215,10 @@ void LD_NNI::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t msb = GetNext8(registers, memory);
     uint16_t nn = Promote(lsb, msb);
     switch (mode) {
-        case NNI_A:
+        case LD_NNI_Mode::NNI_A:
             memory.Write8(nn, registers.A);
             break;
-        case A_NNI:
+        case LD_NNI_Mode::A_NNI:
             registers.A = memory.Read8(nn);
             break;
         default:
@@ -232,9 +232,9 @@ std::string LD_NNI::Print() const {
 
 std::string Print(LDH_C_Mode mode) {
     switch (mode) {
-        case CI_A:
+        case LDH_C_Mode::CI_A:
             return "CI_A";
-        case A_CI:
+        case LDH_C_Mode::A_CI:
             return "A_CI";
         default:
             return "Unrecognized LDH C mode";
@@ -255,10 +255,10 @@ std::string LDH_C::Print() const {
 void LDH_C::ExecuteImpl(Registers& registers, Memory& memory) {
     uint16_t addr = PromoteH(registers.C);
     switch (mode) {
-        case CI_A:
+        case LDH_C_Mode::CI_A:
             memory.Write8(addr, registers.A);
             break;
-        case A_CI:
+        case LDH_C_Mode::A_CI:
             registers.A = memory.Read8(addr);
             break;
         default:
@@ -268,9 +268,9 @@ void LDH_C::ExecuteImpl(Registers& registers, Memory& memory) {
 
 std::string Print(LDH_NI_Mode mode){
     switch (mode) {
-        case NI_A:
+        case LDH_NI_Mode::NI_A:
             return "NI_A";
-        case A_NI:
+        case LDH_NI_Mode::A_NI:
             return "A_NI";
         default:
             return "Unrecognized LDH NI mode";
@@ -292,10 +292,10 @@ void LDH_NI::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t n = GetNext8(registers, memory);
     uint16_t addr = PromoteH(n);
     switch (mode) {
-        case NI_A:
+        case LDH_NI_Mode::NI_A:
             memory.Write8(addr, registers.A);
             break;
-        case A_NI:
+        case LDH_NI_Mode::A_NI:
             registers.A = memory.Read8(addr);
             break;
         default:
@@ -320,16 +320,16 @@ void LD_RR_NN::ExecuteImpl(Registers& registers, Memory& memory) {
     uint16_t nn = Promote(lsb, msb);
 
     switch (target) {
-        case BC:
+        case RR_Target::BC:
             registers.SetBC(nn);
             break;
-        case DE:
+        case RR_Target::DE:
             registers.SetDE(nn);
             break;
-        case HL:
+        case RR_Target::HL:
             registers.SetHL(nn);
             break;
-        case SP:
+        case RR_Target::SP:
             registers.SP = nn;
             break;
     }

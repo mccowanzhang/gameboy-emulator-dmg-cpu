@@ -2,10 +2,25 @@
 
 #include "absl/log/log.h"
 
-PUSH::PUSH(RR_Target target) : target(target) {}
+std::string Print(Stack_Target target) {
+    switch (target) {
+        case Stack_Target::BC:
+            return "BC";
+        case Stack_Target::DE:
+            return "DE";
+        case Stack_Target::HL:
+            return "HL";
+        case Stack_Target::AF:
+            return "AF";
+        default:
+            return "Unrecognized stack target";
+    }
+}
+
+PUSH::PUSH(Stack_Target target) : target(target) {}
 
 std::unique_ptr<Op> PUSH::Decode(uint8_t op_code) {
-    auto target = static_cast<RR_Target>(GetBitRange(op_code, 4, 5));
+    auto target = static_cast<Stack_Target>(GetBitRange(op_code, 4, 5));
     return std::make_unique<PUSH>(target);
 }
 
@@ -16,14 +31,18 @@ std::string PUSH::Print() const {
 void PUSH::ExecuteImpl(Registers& registers, Memory& memory) {
     registers.SP = registers.SP - 2;
     switch (target) {
-        case BC:
+        case Stack_Target::BC:
             memory.Write16(registers.SP, registers.BC());
-        case DE:
+            break;
+        case Stack_Target::DE:
             memory.Write16(registers.SP, registers.DE());
-        case HL:
+            break;
+        case Stack_Target::HL:
             memory.Write16(registers.SP, registers.HL());
-        case SP:
-            memory.Write16(registers.SP, registers.SP);
+            break;
+        case Stack_Target::AF:
+            memory.Write16(registers.SP, registers.AF());
+            break;
         default:
             LOG(FATAL) << "Unrecognized target";
     }

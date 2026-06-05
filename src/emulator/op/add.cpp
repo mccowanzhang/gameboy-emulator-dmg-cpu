@@ -16,28 +16,28 @@ std::unique_ptr<Op> ADD::Decode(uint8_t op_code) {
 void ADD::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t val = 0;
     switch (target) {
-        case A:
+        case Target::A:
             val = registers.A;
             break;
-        case B:
+        case Target::B:
             val = registers.B;
             break;
-        case C:
+        case Target::C:
             val = registers.C;
             break;
-        case D:
+        case Target::D:
             val = registers.D;
             break;
-        case E:
+        case Target::E:
             val = registers.E;
             break;
-        case H:
+        case Target::H:
             val = registers.H;
             break;
-        case L:
+        case Target::L:
             val = registers.L;
             break;
-        case HLI:
+        case Target::HLI:
             val = memory.Read8(registers.HL());
             break;
         default:
@@ -67,28 +67,28 @@ std::unique_ptr<Op> ADC::Decode(uint8_t op_code) {
 void ADC::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t val = 0;
     switch (target) {
-        case A:
+        case Target::A:
             val = registers.A;
             break;
-        case B:
+        case Target::B:
             val = registers.B;
             break;
-        case C:
+        case Target::C:
             val = registers.C;
             break;
-        case D:
+        case Target::D:
             val = registers.D;
             break;
-        case E:
+        case Target::E:
             val = registers.E;
             break;
-        case H:
+        case Target::H:
             val = registers.H;
             break;
-        case L:
+        case Target::L:
             val = registers.L;
             break;
-        case HLI:
+        case Target::HLI:
             val = memory.Read8(registers.HL());
             break;
         default:
