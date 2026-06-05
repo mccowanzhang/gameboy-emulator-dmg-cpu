@@ -38,6 +38,40 @@ std::pair<T, std::array<bool, sizeof(T) * 8>> OverflowingAdd(T a, T b) {
 }
 
 template <typename T>
+std::pair<T, std::array<bool, sizeof(T) * 8>> OverflowingSub(T a, T b) {
+    static_assert(std::is_unsigned_v<T>,
+                  "Borrow tracking only makes sense for unsigned types");
+
+    constexpr size_t kBits = sizeof(T) * 8;
+
+    std::array<bool, kBits> borrow_per_bit{};
+
+    T result = 0;
+    bool borrow = false;
+
+    for (size_t bit = 0; bit < kBits; ++bit) {
+        bool a_bit = (a >> bit) & 1;
+        bool b_bit = (b >> bit) & 1;
+
+        bool diff_bit = a_bit ^ b_bit ^ borrow;
+
+        bool borrow_out =
+            (!a_bit && b_bit) ||
+            (!a_bit && borrow) ||
+            (b_bit && borrow);
+
+        if (diff_bit) {
+            result |= (T{1} << bit);
+        }
+
+        borrow_per_bit[bit] = borrow_out;
+        borrow = borrow_out;
+    }
+
+    return {result, borrow_per_bit};
+}
+
+template <typename T>
 T GetBitRange(T value, uint8_t low, uint8_t high) { // low, high inclusive
     static_assert(std::is_integral_v<T>, "T must be integral");
     constexpr uint8_t kBits = sizeof(T) * 8;

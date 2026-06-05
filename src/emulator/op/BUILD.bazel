@@ -10,6 +10,7 @@ cc_library(
         ":nop",
         ":add",
         ":stack",
+        ":sub",
     ],
     visibility = ["//visibility:public"],
 )
@@ -64,6 +65,14 @@ cc_library(
     name = "stack",
     srcs = ["stack.cpp"],
     hdrs = ["stack.h"],
+    deps = COMMON_OP_DEPS,
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "sub",
+    srcs = ["sub.cpp"],
+    hdrs = ["sub.h"],
     deps = COMMON_OP_DEPS,
     visibility = ["//visibility:public"],
 )
