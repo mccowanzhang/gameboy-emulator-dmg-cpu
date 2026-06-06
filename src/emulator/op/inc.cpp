@@ -22,6 +22,22 @@ void INC::ExecuteImpl(Registers& registers, Memory& memory) {
     registers.SetFlag(H_FLAG, carry_per_bit[3]);
 }
 
+INC_RR::INC_RR(RR_Target target) : target(target) {}
+
+std::unique_ptr<Op> INC_RR::Decode(uint8_t op_code) {
+    auto target = static_cast<RR_Target>(GetBitRange(op_code, 4, 5));
+    return std::make_unique<INC_RR>(target);
+}
+
+std::string INC_RR::Print() const {
+    return "INC_RR, target: " + ::Print(target);
+}
+
+void INC_RR::ExecuteImpl(Registers& registers, Memory& memory) {
+    auto [res, carry_per_bit] = OverflowingAdd(GetRRTarget(registers, target), (uint16_t) 1);
+    SetRRTarget(registers, target, res);
+}
+
 DEC::DEC(Target target) : target(target) {}
 
 std::unique_ptr<Op> DEC::Decode(uint8_t op_code) {

@@ -189,6 +189,11 @@ static const std::vector<DecodeRule> kDecodeRules = {
         .decoder = &INC::Decode,
     },
     {
+        .value = 0b00000011,
+        .mask =  0b11001111,
+        .decoder = &INC_RR::Decode,
+    },
+    {
         .value = 0b00000101,
         .mask =  0b11000111,
         .decoder = &DEC::Decode,

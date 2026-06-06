@@ -40,6 +40,16 @@ TEST_F(INCTest, INC_HLI) {
     EXPECT_FALSE(cpu.registers.GetFlag(Flag::H_FLAG));
 }
 
+TEST_F(INCTest, INC_RR) {
+    std::array<uint8_t, 1> program{
+        0b00000011, // INC_RR BC
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.SetBC(kBigVal1);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.BC(), kBigVal1 + 1);
+}
+
 TEST_F(INCTest, DEC) {
     std::array<uint8_t, 1> program{
         0b00000101, // DEC B
