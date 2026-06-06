@@ -23,3 +23,14 @@ public:
 protected:
     void ExecuteImpl(Registers& registers, Memory& memory) override;
 };
+
+class SBC : public Op {
+public:
+    explicit SBC(Target target);
+    static std::unique_ptr<Op> Decode(uint8_t op_code);
+    std::string Print() const override;
+protected:
+    void ExecuteImpl(Registers& registers, Memory& memory) override;
+private:
+    Target target;
+};

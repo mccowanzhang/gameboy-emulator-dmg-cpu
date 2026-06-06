@@ -13,6 +13,14 @@ void SUB(Registers& registers, uint8_t val) {
     registers.SetFlag(C_FLAG, borrow_per_bit[7]);
 }
 
+void SBC(Registers& registers, uint8_t val) {
+    auto [res1, carry_per_bit1] = OverflowingAdd<uint8_t>(
+        val,
+        static_cast<uint8_t>(registers.GetFlag(Flag::C_FLAG))
+    );
+    SUB(registers, res1);
+}
+
 SUB::SUB(Target target) : target(target) {}
 
 std::unique_ptr<Op> SUB::Decode(uint8_t op_code) {
@@ -68,3 +76,44 @@ void SUB_N::ExecuteImpl(Registers& registers, Memory& memory) {
     ::SUB(registers, n);
 }
 
+SBC::SBC(Target target) : target(target) {}
+
+std::unique_ptr<Op> SBC::Decode(uint8_t op_code) {
+    auto target = static_cast<Target>(GetBitRange(op_code, 0, 2));
+    return std::make_unique<SBC>(target);
+}
+
+std::string SBC::Print() const {
+    return "SBC, target: " + ::Print(target);
+}
+
+void SBC::ExecuteImpl(Registers& registers, Memory& memory) {
+    switch (target) {
+        case Target::A:
+            ::SBC(registers, registers.A);
+            break;
+        case Target::B:
+            ::SBC(registers, registers.B);
+            break;
+        case Target::C:
+            ::SBC(registers, registers.C);
+            break;
+        case Target::D:
+            ::SBC(registers, registers.D);
+            break;
+        case Target::E:
+            ::SBC(registers, registers.E);
+            break;
+        case Target::H:
+            ::SBC(registers, registers.H);
+            break;
+        case Target::L:
+            ::SBC(registers, registers.L);
+            break;
+        case Target::HLI:
+            ::SBC(registers, memory.Read8(registers.HL()));
+            break;
+        default:
+            LOG(FATAL) << "Unrecognized SBC target";
+    }
+}
