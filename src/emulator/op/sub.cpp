@@ -54,3 +54,17 @@ void SUB::ExecuteImpl(Registers& registers, Memory& memory) {
             LOG(FATAL) << "Unrecognized SUB target";
     }
 }
+
+std::unique_ptr<Op> SUB_N::Decode(uint8_t op_code) {
+    return std::make_unique<SUB_N>();
+}
+
+std::string SUB_N::Print() const {
+    return "SUB_N";
+}
+
+void SUB_N::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint8_t n = GetNext8(registers, memory);
+    ::SUB(registers, n);
+}
+

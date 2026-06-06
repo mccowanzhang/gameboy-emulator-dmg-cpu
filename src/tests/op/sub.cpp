@@ -48,3 +48,20 @@ TEST_F(SUBTest, SUB_HLI) {
     EXPECT_FALSE(cpu.registers.GetFlag(Flag::H_FLAG));
     EXPECT_FALSE(cpu.registers.GetFlag(Flag::C_FLAG));
 }
+
+TEST_F(SUBTest, SUB_N) {
+    std::array<uint8_t, 2> program{
+        0b11010110, // SUB_N
+        kVal1,
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal2;
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, kVal2 - kVal1);
+    EXPECT_EQ(cpu.registers.PC, 0x0002);
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::Z_FLAG));
+    EXPECT_TRUE(cpu.registers.GetFlag(Flag::N_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::H_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::C_FLAG));
+}
+
