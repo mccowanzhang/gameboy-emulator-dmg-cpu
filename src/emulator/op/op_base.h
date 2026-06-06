@@ -31,6 +31,8 @@ enum class Target : uint8_t {
     HLI = 0b110,
 };
 std::string Print(Target target);
+uint8_t GetTarget(Registers& registers, Memory& memory, Target target);
+void SetTarget(Registers& registers, Memory& memory, Target target, uint8_t val);
 
 enum class RR_Target : uint8_t {
     BC = 0b00,
@@ -39,6 +41,8 @@ enum class RR_Target : uint8_t {
     SP = 0b11,
 };
 std::string Print(RR_Target target);
+uint16_t GetRRTarget(Registers& registers, RR_Target target);
+void SetRRTarget(Registers& registers, RR_Target target, uint16_t val);
 
 uint8_t GetNext8(Registers& registers, Memory& memory);
 uint16_t GetNext16(Registers& registers, Memory& memory);

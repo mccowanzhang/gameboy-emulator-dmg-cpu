@@ -17,6 +17,41 @@ std::string Print(Stack_Target target) {
     }
 }
 
+uint16_t GetStackTarget(Registers& registers, Stack_Target target) {
+    switch (target) {
+        case Stack_Target::BC:
+            return registers.BC();
+        case Stack_Target::DE:
+            return registers.DE();
+        case Stack_Target::HL:
+            return registers.HL();
+        case Stack_Target::AF:
+            return registers.AF();
+        default:
+            LOG(FATAL) << "Unrecognized stack target";
+            return 0;
+    }
+}
+
+void SetStackTarget(Registers& registers, Stack_Target target, uint16_t val) {
+    switch (target) {
+        case Stack_Target::BC:
+            registers.SetBC(val);
+            break;
+        case Stack_Target::DE:
+            registers.SetDE(val);
+            break;
+        case Stack_Target::HL:
+            registers.SetHL(val);
+            break;
+        case Stack_Target::AF:
+            registers.SetAF(val);
+            break;
+        default:
+            LOG(FATAL) << "Unrecognized stack target";
+    }
+}
+
 PUSH::PUSH(Stack_Target target) : target(target) {}
 
 std::unique_ptr<Op> PUSH::Decode(uint8_t op_code) {
@@ -30,22 +65,7 @@ std::string PUSH::Print() const {
 
 void PUSH::ExecuteImpl(Registers& registers, Memory& memory) {
     registers.SP = registers.SP - 2;
-    switch (target) {
-        case Stack_Target::BC:
-            memory.Write16(registers.SP, registers.BC());
-            break;
-        case Stack_Target::DE:
-            memory.Write16(registers.SP, registers.DE());
-            break;
-        case Stack_Target::HL:
-            memory.Write16(registers.SP, registers.HL());
-            break;
-        case Stack_Target::AF:
-            memory.Write16(registers.SP, registers.AF());
-            break;
-        default:
-            LOG(FATAL) << "Unrecognized target";
-    }
+    memory.Write16(registers.SP, GetStackTarget(registers, target));
 }
 
 POP::POP(Stack_Target target) : target(target) {}
@@ -60,21 +80,7 @@ std::string POP::Print() const {
 }
 
 void POP::ExecuteImpl(Registers& registers, Memory& memory) {
-    switch (target) {
-        case Stack_Target::BC:
-            registers.SetBC(memory.Read16(registers.SP));
-            break;
-        case Stack_Target::DE:
-            registers.SetDE(memory.Read16(registers.SP));
-            break;
-        case Stack_Target::HL:
-            registers.SetHL(memory.Read16(registers.SP));
-            break;
-        case Stack_Target::AF:
-            registers.SetAF(memory.Read16(registers.SP));
-            break;
-        default:
-            LOG(FATAL) << "Unrecognized target";
-    }
+    uint16_t val = memory.Read16(registers.SP);
+    SetStackTarget(registers, target, val);
     registers.SP = registers.SP + 2;
 }

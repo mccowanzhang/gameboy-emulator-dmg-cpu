@@ -31,36 +31,7 @@ std::unique_ptr<Op> ADD::Decode(uint8_t op_code) {
 }
 
 void ADD::ExecuteImpl(Registers& registers, Memory& memory) {
-    uint8_t val = 0;
-    switch (target) {
-        case Target::A:
-            val = registers.A;
-            break;
-        case Target::B:
-            val = registers.B;
-            break;
-        case Target::C:
-            val = registers.C;
-            break;
-        case Target::D:
-            val = registers.D;
-            break;
-        case Target::E:
-            val = registers.E;
-            break;
-        case Target::H:
-            val = registers.H;
-            break;
-        case Target::L:
-            val = registers.L;
-            break;
-        case Target::HLI:
-            val = memory.Read8(registers.HL());
-            break;
-        default:
-            LOG(FATAL) << "Unrecognized ADD target";
-    }
-
+    uint8_t val = GetTarget(registers, memory, target);
     ::ADD(registers, val);
 }
 
@@ -89,36 +60,7 @@ std::unique_ptr<Op> ADC::Decode(uint8_t op_code) {
 }
 
 void ADC::ExecuteImpl(Registers& registers, Memory& memory) {
-    uint8_t val = 0;
-    switch (target) {
-        case Target::A:
-            val = registers.A;
-            break;
-        case Target::B:
-            val = registers.B;
-            break;
-        case Target::C:
-            val = registers.C;
-            break;
-        case Target::D:
-            val = registers.D;
-            break;
-        case Target::E:
-            val = registers.E;
-            break;
-        case Target::H:
-            val = registers.H;
-            break;
-        case Target::L:
-            val = registers.L;
-            break;
-        case Target::HLI:
-            val = memory.Read8(registers.HL());
-            break;
-        default:
-            LOG(FATAL) << "Unrecognized ADC target\n";
-    }
-
+    uint8_t val = GetTarget(registers, memory, target);
     ::ADC(registers, val);
 }
 

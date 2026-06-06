@@ -19,64 +19,8 @@ std::string LD::Print() const {
 }
 
 void LD::ExecuteImpl(Registers& registers, Memory& memory) {
-    uint8_t val = 0;
-    switch (source) {
-        case Target::A:
-            val = registers.A;
-            break;
-        case Target::B:
-            val = registers.B;
-            break;
-        case Target::C:
-            val = registers.C;
-            break;
-        case Target::D:
-            val = registers.D;
-            break;
-        case Target::E:
-            val = registers.E;
-            break;
-        case Target::H:
-            val = registers.H;
-            break;
-        case Target::L:
-            val = registers.L;
-            break;
-        case Target::HLI:
-            val = memory.Read8(registers.HL());
-            break;
-        default:
-            LOG(FATAL) << "Unrecognized source operand";
-    }
-
-    switch (dest) {
-        case Target::A:
-            registers.A = val;
-            break;
-        case Target::B:
-            registers.B = val;
-            break;
-        case Target::C:
-            registers.C = val;
-            break;
-        case Target::D:
-            registers.D = val;
-            break;
-        case Target::E:
-            registers.E = val;
-            break;
-        case Target::H:
-            registers.H = val;
-            break;
-        case Target::L:
-            registers.L = val;
-            break;
-        case Target::HLI:
-            memory.Write8(registers.HL(), val);
-            break;
-        default:
-            LOG(FATAL) << "Unrecognized dest operand";
-    }
+    uint8_t val = GetTarget(registers, memory, source);
+    SetTarget(registers, memory, dest, val);
 }
 
 LD_R_N::LD_R_N(Target dest) : dest(dest) {}
@@ -91,36 +35,8 @@ std::string LD_R_N::Print() const {
 }
 
 void LD_R_N::ExecuteImpl(Registers& registers, Memory& memory) {
-    uint8_t val = ::GetNext8(registers, memory);
-
-    switch (dest) {
-        case Target::A:
-            registers.A = val;
-            break;
-        case Target::B:
-            registers.B = val;
-            break;
-        case Target::C:
-            registers.C = val;
-            break;
-        case Target::D:
-            registers.D = val;
-            break;
-        case Target::E:
-            registers.E = val;
-            break;
-        case Target::H:
-            registers.H = val;
-            break;
-        case Target::L:
-            registers.L = val;
-            break;
-        case Target::HLI:
-            memory.Write8(registers.HL(), val);
-            break;
-        default:
-            LOG(FATAL) << "Unrecognized dest operand";
-    }
+    uint8_t n = ::GetNext8(registers, memory);
+    SetTarget(registers, memory, dest, n);
 }
 
 std::string Print(LD_RR_Mode mode) {
@@ -319,20 +235,7 @@ void LD_RR_NN::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t msb = GetNext8(registers, memory);
     uint16_t nn = Promote(lsb, msb);
 
-    switch (target) {
-        case RR_Target::BC:
-            registers.SetBC(nn);
-            break;
-        case RR_Target::DE:
-            registers.SetDE(nn);
-            break;
-        case RR_Target::HL:
-            registers.SetHL(nn);
-            break;
-        case RR_Target::SP:
-            registers.SP = nn;
-            break;
-    }
+    SetRRTarget(registers, target, nn);
 }
 
 std::unique_ptr<Op> LD_NNI_SP::Decode(uint8_t op_code) {
