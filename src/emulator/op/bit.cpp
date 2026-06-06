@@ -40,3 +40,41 @@ void CP_N::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t val = GetNext8(registers, memory);
     ::CP(registers, val);
 }
+
+void AND(Registers& registers, uint8_t val) {
+    uint8_t res = registers.A & val;
+    registers.A = res;
+    registers.SetFlag(Z_FLAG, res == 0);
+    registers.SetFlag(N_FLAG, false);
+    registers.SetFlag(H_FLAG, true);
+    registers.SetFlag(C_FLAG, false);
+}
+
+AND::AND(Target target) : target(target) {}
+
+std::unique_ptr<Op> AND::Decode(uint8_t op_code) {
+    auto target = static_cast<Target>(GetBitRange(op_code, 0, 2));
+    return std::make_unique<AND>(target);
+}
+
+std::string AND::Print() const {
+    return "AND, target: " + ::Print(target);
+}
+
+void AND::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint8_t val = GetTarget(registers, memory, target);
+    ::AND(registers, val);
+}
+
+std::unique_ptr<Op> AND_N::Decode(uint8_t op_code) {
+    return std::make_unique<AND_N>();
+}
+
+std::string AND_N::Print() const {
+    return "AND_N";
+}
+
+void AND_N::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint8_t val = GetNext8(registers, memory);
+    ::AND(registers, val);
+}
