@@ -215,3 +215,17 @@ void DAA::ExecuteImpl(Registers& registers, Memory& memory) {
     registers.SetFlag(Flag::H_FLAG, false);
     registers.SetFlag(Flag::C_FLAG, carry);
 }
+
+std::unique_ptr<Op> CPL::Decode(uint8_t op_code) {
+    return std::make_unique<CPL>();
+}
+
+std::string CPL::Print() const {
+    return "CPL";
+}
+
+void CPL::ExecuteImpl(Registers& registers, Memory& memory) {
+    registers.A = ~registers.A;
+    registers.SetFlag(Flag::N_FLAG, true);
+    registers.SetFlag(Flag::H_FLAG, true);
+}

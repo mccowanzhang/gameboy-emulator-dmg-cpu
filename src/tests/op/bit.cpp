@@ -261,3 +261,15 @@ TEST_F(BITTest, DAA) {
     EXPECT_FALSE(cpu.registers.GetFlag(Flag::N_FLAG));
     EXPECT_FALSE(cpu.registers.GetFlag(Flag::H_FLAG));
 }
+
+TEST_F(BITTest, CPL) {
+    std::array<uint8_t, 1> program{
+        0b00101111, // CPL
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal2;
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, (uint8_t)(~kVal2));
+    EXPECT_TRUE(cpu.registers.GetFlag(Flag::N_FLAG));
+    EXPECT_TRUE(cpu.registers.GetFlag(Flag::H_FLAG));
+}
