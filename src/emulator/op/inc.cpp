@@ -21,3 +21,22 @@ void INC::ExecuteImpl(Registers& registers, Memory& memory) {
     registers.SetFlag(N_FLAG, false);
     registers.SetFlag(H_FLAG, carry_per_bit[3]);
 }
+
+DEC::DEC(Target target) : target(target) {}
+
+std::unique_ptr<Op> DEC::Decode(uint8_t op_code) {
+    auto target = static_cast<Target>(GetBitRange(op_code, 3, 5));
+    return std::make_unique<DEC>(target);
+}
+
+std::string DEC::Print() const {
+    return "DEC, target: " + ::Print(target);
+}
+
+void DEC::ExecuteImpl(Registers& registers, Memory& memory) {
+    auto [res, carry_per_bit] = OverflowingSub(GetTarget(registers, memory, target), (uint8_t) 1);
+    SetTarget(registers, memory, target, res);
+    registers.SetFlag(Z_FLAG, res == 0);
+    registers.SetFlag(N_FLAG, true);
+    registers.SetFlag(H_FLAG, carry_per_bit[3]);
+}
