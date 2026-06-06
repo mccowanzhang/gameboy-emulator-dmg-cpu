@@ -42,3 +42,22 @@ public:
 protected:
     void ExecuteImpl(Registers& registers, Memory& memory) override;
 };
+
+class OR : public Op {
+public:
+    explicit OR(Target target);
+    static std::unique_ptr<Op> Decode(uint8_t op_code);
+    std::string Print() const override;
+protected:
+    void ExecuteImpl(Registers& registers, Memory& memory) override;
+private:
+    Target target;
+};
+
+class OR_N : public Op {
+public:
+    static std::unique_ptr<Op> Decode(uint8_t op_code);
+    std::string Print() const override;
+protected:
+    void ExecuteImpl(Registers& registers, Memory& memory) override;
+};
