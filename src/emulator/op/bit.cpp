@@ -182,3 +182,36 @@ void SCF::ExecuteImpl(Registers& registers, Memory& memory) {
     registers.SetFlag(Flag::N_FLAG, false);
     registers.SetFlag(Flag::H_FLAG, false);
 }
+
+std::unique_ptr<Op> DAA::Decode(uint8_t op_code) {
+    return std::make_unique<DAA>();
+}
+
+std::string DAA::Print() const {
+    return "DAA";
+}
+
+void DAA::ExecuteImpl(Registers& registers, Memory& memory) {
+    // referenced:
+    // https://github.com/Gekkio/mooneye-gb/blob/754403792d60821e12835ba454d7e8b66553ed22/core/src/cpu/mod.rs#L812-L846
+    // https://github.com/rylev/DMG-01/blob/00bed9baedab5548d63d646f60acb7af4b3e3658/lib-dmg-01/src/cpu/mod.rs#L1337
+    bool carry = false;
+    if (!registers.GetFlag(Flag::N_FLAG)) { // prev op was ADD/ADC
+        if (registers.GetFlag(Flag::C_FLAG) || registers.A > 0x99) {
+            registers.A += 0x60;
+            carry = true;
+        }
+        if (registers.GetFlag(Flag::H_FLAG) || LowerNibble(registers.A) > 0x09) {
+            registers.A += 0x06;
+        }
+    } else if (registers.GetFlag(Flag::C_FLAG)) {
+        carry = true;
+        registers.A += registers.GetFlag(Flag::H_FLAG) ? 0x9A : 0xA0;
+    } else if (registers.GetFlag(Flag::H_FLAG)) {
+        registers.A += 0xFA;
+    }
+
+    registers.SetFlag(Flag::Z_FLAG, registers.A == 0);
+    registers.SetFlag(Flag::H_FLAG, false);
+    registers.SetFlag(Flag::C_FLAG, carry);
+}

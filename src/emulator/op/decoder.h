@@ -174,6 +174,11 @@ static const std::vector<DecodeRule> kDecodeRules = {
         .decoder = &SCF::Decode,
     },
     {
+        .value = 0b00100111,
+        .mask =  0b11111111,
+        .decoder = &DAA::Decode,
+    },
+    {
         .value = 0b00000100,
         .mask =  0b11000111,
         .decoder = &INC::Decode,

@@ -100,3 +100,7 @@ inline uint8_t LSB(uint16_t val) {
 inline uint8_t MSB(uint16_t val) {
     return static_cast<uint8_t>(val >> 8);
 }
+
+inline uint8_t LowerNibble(uint8_t val) {
+    return (val & 0x0F);
+}
