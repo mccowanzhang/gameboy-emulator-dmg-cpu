@@ -60,3 +60,19 @@ TEST_F(BITTest, CP_HLI) {
     EXPECT_FALSE(cpu.registers.GetFlag(Flag::H_FLAG));
     EXPECT_FALSE(cpu.registers.GetFlag(Flag::C_FLAG));
 }
+
+TEST_F(BITTest, CP_N) {
+    std::array<uint8_t, 2> program{
+        0b11111110, // CP_N
+        kVal1,
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal2;
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, kVal2);
+    EXPECT_EQ(cpu.registers.PC, 0x0002);
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::Z_FLAG));
+    EXPECT_TRUE(cpu.registers.GetFlag(Flag::N_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::H_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::C_FLAG));
+}
