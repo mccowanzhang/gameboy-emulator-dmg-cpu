@@ -169,3 +169,16 @@ void CCF::ExecuteImpl(Registers& registers, Memory& memory) {
     registers.FlipFlag(Flag::C_FLAG);
 }
 
+std::unique_ptr<Op> SCF::Decode(uint8_t op_code) {
+    return std::make_unique<SCF>();
+}
+
+std::string SCF::Print() const {
+    return "SCF";
+}
+
+void SCF::ExecuteImpl(Registers& registers, Memory& memory) {
+    registers.SetFlag(Flag::C_FLAG, true);
+    registers.SetFlag(Flag::N_FLAG, false);
+    registers.SetFlag(Flag::H_FLAG, false);
+}

@@ -234,3 +234,17 @@ TEST_F(BITTest, CCF) {
     EXPECT_FALSE(cpu.registers.GetFlag(Flag::N_FLAG));
     EXPECT_FALSE(cpu.registers.GetFlag(Flag::H_FLAG));
 }
+
+TEST_F(BITTest, SCF) {
+    std::array<uint8_t, 1> program{
+        0b00110111, // SCF
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.SetFlag(Flag::C_FLAG, false);
+    cpu.registers.SetFlag(Flag::N_FLAG, true);
+    cpu.registers.SetFlag(Flag::H_FLAG, true);
+    cpu.Step();
+    EXPECT_TRUE(cpu.registers.GetFlag(Flag::C_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::N_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::H_FLAG));
+}
