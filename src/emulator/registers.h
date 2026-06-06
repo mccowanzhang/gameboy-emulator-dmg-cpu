@@ -33,6 +33,7 @@ public:
     void SetF(uint8_t val) { F = (val & 0xF0); } // bits 0:3 always 0
     bool GetFlag(Flag flag) { return (F & flag) != 0; }
     void SetFlag(Flag flag, bool flag_val) { SetF(flag_val ? (F | flag) : (F & ~flag)); }
+    void FlipFlag(Flag flag) { SetF(F ^ flag); }
 
     uint16_t AF() const { return Promote(F, A); }
     uint16_t BC() const { return Promote(C, B); }

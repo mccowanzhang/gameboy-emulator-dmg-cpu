@@ -154,3 +154,18 @@ void XOR_N::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t val = GetNext8(registers, memory);
     ::XOR(registers, val);
 }
+
+std::unique_ptr<Op> CCF::Decode(uint8_t op_code) {
+    return std::make_unique<CCF>();
+}
+
+std::string CCF::Print() const {
+    return "CCF";
+}
+
+void CCF::ExecuteImpl(Registers& registers, Memory& memory) {
+    registers.SetFlag(Flag::N_FLAG, false);
+    registers.SetFlag(Flag::H_FLAG, false);
+    registers.FlipFlag(Flag::C_FLAG);
+}
+
