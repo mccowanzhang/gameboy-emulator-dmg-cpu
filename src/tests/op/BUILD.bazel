@@ -40,6 +40,14 @@ cc_test(
 )
 
 cc_test(
+    name = "bit",
+    srcs = ["bit.cpp"],
+    deps = TEST_DEPS + [
+        "//src/emulator/op:bit",
+    ],
+)
+
+cc_test(
     name = "stack",
     srcs = ["stack.cpp"],
     deps = TEST_DEPS + [

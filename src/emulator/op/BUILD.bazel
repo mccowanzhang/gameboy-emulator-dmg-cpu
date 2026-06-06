@@ -9,6 +9,7 @@ cc_library(
         ":ld",
         ":nop",
         ":add",
+        ":bit",
         ":stack",
         ":sub",
     ],
@@ -57,6 +58,14 @@ cc_library(
     name = "add",
     srcs = ["add.cpp"],
     hdrs = ["add.h"],
+    deps = COMMON_OP_DEPS,
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "bit",
+    srcs = ["bit.cpp"],
+    hdrs = ["bit.h"],
     deps = COMMON_OP_DEPS,
     visibility = ["//visibility:public"],
 )

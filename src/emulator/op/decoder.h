@@ -1,6 +1,7 @@
 #pragma once 
 
 #include "src/emulator/op/add.h"
+#include "src/emulator/op/bit.h"
 #include "src/emulator/op/ld.h"
 #include "src/emulator/op/nop.h"
 #include "src/emulator/op/stack.h"
@@ -120,6 +121,11 @@ static const std::vector<DecodeRule> kDecodeRules = {
         .value = 0b11011110,
         .mask =  0b11111111,
         .decoder = &SBC_N::Decode,
+    },
+    {
+        .value = 0b10111000,
+        .mask =  0b11111000,
+        .decoder = &CP::Decode,
     },
 };
 
