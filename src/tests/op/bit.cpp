@@ -172,3 +172,51 @@ TEST_F(BITTest, OR_N) {
     EXPECT_FALSE(cpu.registers.GetFlag(Flag::H_FLAG));
     EXPECT_FALSE(cpu.registers.GetFlag(Flag::C_FLAG));
 }
+
+TEST_F(BITTest, XOR) {
+    std::array<uint8_t, 1> program{
+        0b10101000, // XOR B
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal2;
+    cpu.registers.B = kVal1;
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, kVal1 ^ kVal2);
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::Z_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::N_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::H_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::C_FLAG));
+}
+
+
+TEST_F(BITTest, XOR_HLI) {
+    std::array<uint8_t, 1> program{
+        0b10101110, // XOR (HL)
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal2;
+    cpu.registers.SetHL(kAddr);
+    cpu.memory.Write8(kAddr, kVal1);
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, kVal1 ^ kVal2);
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::Z_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::N_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::H_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::C_FLAG));
+}
+
+TEST_F(BITTest, XOR_N) {
+    std::array<uint8_t, 2> program{
+        0b11101110, // XOR_N
+        kVal1,
+    };
+    cpu.memory.WriteProgram(kStartPC, program);
+    cpu.registers.A = kVal2;
+    cpu.Step();
+    EXPECT_EQ(cpu.registers.A, kVal1 ^ kVal2);
+    EXPECT_EQ(cpu.registers.PC, 0x0002);
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::Z_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::N_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::H_FLAG));
+    EXPECT_FALSE(cpu.registers.GetFlag(Flag::C_FLAG));
+}

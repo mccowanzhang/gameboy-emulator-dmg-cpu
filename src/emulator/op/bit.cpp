@@ -116,3 +116,41 @@ void OR_N::ExecuteImpl(Registers& registers, Memory& memory) {
     uint8_t val = GetNext8(registers, memory);
     ::OR(registers, val);
 }
+
+void XOR(Registers& registers, uint8_t val) {
+    uint8_t res = registers.A ^ val;
+    registers.A = res;
+    registers.SetFlag(Z_FLAG, res == 0);
+    registers.SetFlag(N_FLAG, false);
+    registers.SetFlag(H_FLAG, false);
+    registers.SetFlag(C_FLAG, false);
+}
+
+XOR::XOR(Target target) : target(target) {}
+
+std::unique_ptr<Op> XOR::Decode(uint8_t op_code) {
+    auto target = static_cast<Target>(GetBitRange(op_code, 0, 2));
+    return std::make_unique<XOR>(target);
+}
+
+std::string XOR::Print() const {
+    return "XOR, target: " + ::Print(target);
+}
+
+void XOR::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint8_t val = GetTarget(registers, memory, target);
+    ::XOR(registers, val);
+}
+
+std::unique_ptr<Op> XOR_N::Decode(uint8_t op_code) {
+    return std::make_unique<XOR_N>();
+}
+
+std::string XOR_N::Print() const {
+    return "XOR_N";
+}
+
+void XOR_N::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint8_t val = GetNext8(registers, memory);
+    ::XOR(registers, val);
+}
