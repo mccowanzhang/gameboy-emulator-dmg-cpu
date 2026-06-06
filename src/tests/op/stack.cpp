@@ -2,6 +2,7 @@
 
 #include "src/emulator/CPU.h"
 #include "src/emulator/memory.h"
+#include "src/tests/test_base.h"
 
 #include <gtest/gtest.h>
 
@@ -10,10 +11,6 @@
 
 class STACKTest : public ::testing::Test {
 protected:
-    static constexpr uint16_t kBigVal1 = 0x1234;
-    static constexpr uint16_t kAddr = 0x0040;
-    static constexpr uint16_t kStartPC = 0x0000;
-
     Memory memory;
     CPU cpu{memory};
 };

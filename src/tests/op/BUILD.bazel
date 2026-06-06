@@ -1,6 +1,8 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_cc//cc:defs.bzl", "cc_test")
 
 TEST_DEPS = [
+    "//src/tests:test_base",
     "//src/emulator:CPU",
     "//src/emulator:memory",
     "@googletest//:gtest",
