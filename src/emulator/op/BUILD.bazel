@@ -6,10 +6,11 @@ cc_library(
     hdrs = ["decoder.h"],
     deps = [
         ":op_base",
-        ":ld",
-        ":nop",
         ":add",
         ":bit",
+        ":inc",
+        ":ld",
+        ":nop",
         ":stack",
         ":sub",
     ],
@@ -66,6 +67,14 @@ cc_library(
     name = "bit",
     srcs = ["bit.cpp"],
     hdrs = ["bit.h"],
+    deps = COMMON_OP_DEPS,
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "inc",
+    srcs = ["inc.cpp"],
+    hdrs = ["inc.h"],
     deps = COMMON_OP_DEPS,
     visibility = ["//visibility:public"],
 )

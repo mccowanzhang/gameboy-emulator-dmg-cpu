@@ -2,6 +2,7 @@
 
 #include "src/emulator/op/add.h"
 #include "src/emulator/op/bit.h"
+#include "src/emulator/op/inc.h"
 #include "src/emulator/op/ld.h"
 #include "src/emulator/op/nop.h"
 #include "src/emulator/op/stack.h"
@@ -131,6 +132,11 @@ static const std::vector<DecodeRule> kDecodeRules = {
         .value = 0b11111110,
         .mask =  0b11111111,
         .decoder = &CP_N::Decode,
+    },
+    {
+        .value = 0b00000100,
+        .mask =  0b11000111,
+        .decoder = &INC::Decode,
     },
 };
 
