@@ -117,3 +117,16 @@ void SBC::ExecuteImpl(Registers& registers, Memory& memory) {
             LOG(FATAL) << "Unrecognized SBC target";
     }
 }
+
+std::unique_ptr<Op> SBC_N::Decode(uint8_t op_code) {
+    return std::make_unique<SBC_N>();
+}
+
+std::string SBC_N::Print() const {
+    return "SBC_N";
+}
+
+void SBC_N::ExecuteImpl(Registers& registers, Memory& memory) {
+    uint8_t n = GetNext8(registers, memory);
+    ::SBC(registers, n);
+}

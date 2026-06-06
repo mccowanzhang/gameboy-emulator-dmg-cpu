@@ -116,6 +116,11 @@ static const std::vector<DecodeRule> kDecodeRules = {
         .mask =  0b11111000,
         .decoder = &SBC::Decode,
     },
+    {
+        .value = 0b11011110,
+        .mask =  0b11111111,
+        .decoder = &SBC_N::Decode,
+    },
 };
 
 std::unique_ptr<Op> DecodeOp(uint8_t op_code);
